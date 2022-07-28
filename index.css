@@ -1,9 +1,622 @@
+@import url(https://fonts.googleapis.com/css?family=Playfair+Display);
+
+html {
+	font-family: Playfair Display, sans-serif;
+	font-size: 12pt;
+}
+
 body {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    background-color: lightskyblue;
-    background-image: url(loading.gif);
-    background-repeat: no-repeat;
-    background-position: center;
+	margin: 0;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+header {
+	flex: 1;
+	border: 1px solid grey;
+	background-color: blueviolet;
+	color: white;
+	display: flex;
+	flex-direction: column;
+}
+
+header ul:first-child {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: space-evenly;
+	flex-flow: row nowrap;
+	font-size: 1rem;
+}
+
+header nav {
+	visibility: hidden;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	background-color: darkturquoise;
+	width: auto;
+	padding: 10px 25px 15px 10px;
+	z-index: 1;
+	border-radius: 5px;
+}
+
+header nav::before {
+	content: "▲";
+	color: darkturquoise;
+	position: absolute;
+	top: -17px;
+	left: 15px;
+}
+
+header h3 {
+	cursor: pointer;
+}
+
+header nav span {
+	margin: 5px;
+	cursor: pointer;
+}
+
+header nav span:hover {
+	color: blueviolet;
+}
+
+header ul:first-child li:hover h3 {
+	color: darkturquoise;
+}
+
+header ul:first-child li:hover nav {
+	visibility: visible;
+}
+
+header ul:last-child {
+	background-color: white;
+	color: black;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 5px 10px;
+}
+
+header input {
+	width: 3rem;
+}
+
+header ul:last-child span {
+	font-size: 1.3rem;
+	margin: 2px;
+}
+
+header ul:last-child span:hover {
+	cursor: pointer;
+}
+
+
+main {
+	flex: 8;
+	border: 1px solid grey;
+	padding: 4rem;
+	display: grid;
+	grid-template-columns: repeat(3, minmax(15rem, 1fr));
+	grid-auto-flow: rows;
+	grid-auto-rows: 5rem;
+	grid-column-gap: 0;
+	grid-row-gap: 4rem;
+	overflow: scroll;
+}
+
+main ol {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	height: 4.1rem;
+	flex: 1 1 20rem;
+	background-image: linear-gradient(rgba(0, 0, 0, 50%) 1px, transparent 1px);
+	background-size: 100% 1rem;
+	background-repeat: repeat;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+}
+
+main ol:not(:first-child) {
+	display: grid;
+	grid-template: 1fr / repeat(4, 1fr);
+	padding: 0;
+	margin: 0;
+}
+
+main ol:first-child::before {
+	content: "𝄞";
+	position: relative;
+	font-size: 9rem;
+	top: -4.9rem;
+}
+
+main ol:first-child::after {
+	content: "c";
+	position: relative;
+	font-size: 3.6rem;
+	top: -6.8rem;
+}
+
+main ol:first-child {
+	margin-left: 6rem;
+	border-right: 0;
+}
+
+main ol:nth-of-type(2) {
+	border-left: 0;
+}
+
+/*main ol:last-child::before {
+	content: "𝄂";
+	position: relative;
+	top: -2.5rem;
+	right: 1.4rem;
+	left: auto;
+	font-size: 6rem;
+}*/
+
+main ol:last-child {
+	border-right: 10px double black;
+	box-shadow: 5px 0 0 black;
+	margin-right: -1rem;
+}
+
+main ol:not(:first-child) li {
+	margin-top: -2rem;
+	margin-bottom: -1rem;
+}
+
+main ol:not(:first-child) li:hover {
+	background-color: hsla(60deg, 100%, 50%, 50%);
+}
+
+main ol:not(:first-child) li:before {
+	content: "▲";
+	color: blue;
+	position: relative;
+	top: 7.5rem;
+	left: 1.4rem;
+	visibility: hidden;
+}
+
+main ol:not(:first-child) li:active:before {
+	visibility: visible;
+}
+
+
+
+footer {
+	flex: 3;
+	border: 1px solid grey;
+	background-color: black;
+	overflow-y: scroll;
+	display: block;
+}
+
+footer ul {
+	list-style-type: none;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	grid-template: repeat(3, 1fr) / repeat(45, minmax(15px, 1fr));
+}
+
+footer li {
+	border: 2px solid black;
+	border-radius: 0 0 8px 8px;
+}
+
+footer li:nth-of-type(1) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 1 / span 3;
+}
+
+footer li:nth-of-type(2) {
+	background-color: black;
+	grid-row: 1 / span 2;
+	grid-column: 3 / span 2;
+}
+
+footer li:nth-of-type(3) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 4 / span 3;
+}
+
+footer li:nth-of-type(4) {
+	background-color: black;
+	grid-row: 1 / span 2;
+	grid-column: 6 / span 2;
+}
+
+footer li:nth-of-type(5) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 7 / span 3;
+}
+
+footer li:nth-of-type(6) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 10 / span 3;
+}
+
+footer li:nth-of-type(7) {
+	background-color: black;
+	grid-row: 1 / span 2;
+	grid-column: 12 / span 2;
+}
+
+footer li:nth-of-type(8) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 13 / span 3;
+}
+
+footer li:nth-of-type(9) {
+	background-color: black;
+	grid-row: 1 / span 2;
+	grid-column: 15 / span 2;
+}
+
+footer li:nth-of-type(10) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 16 / span 3;
+}
+
+footer li:nth-of-type(11) {
+	background-color: black;
+	grid-row: 1 / span 2;
+	grid-column: 18 / span 2;
+}
+
+footer li:nth-of-type(12) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 19 / span 3;
+}
+
+footer li:nth-of-type(13) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 22 / span 3;
+}
+
+
+
+footer li:nth-of-type(14) {
+	background-color: black;
+	grid-row: 1 / span 2;
+	grid-column: 24 / span 2;
+}
+
+footer li:nth-of-type(15) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 25 / span 3;
+}
+
+footer li:nth-of-type(16) {
+	background-color: black;
+	grid-row: 1 / span 2;
+	grid-column: 27 / span 2;
+}
+
+footer li:nth-of-type(17) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 28 / span 3;
+}
+
+footer li:nth-of-type(18) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 31 / span 3;
+}
+
+footer li:nth-of-type(19) {
+	background-color: black;
+	grid-row: 1 / span 2;
+	grid-column: 33 / span 2;
+}
+
+footer li:nth-of-type(20) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 34 / span 3;
+}
+
+footer li:nth-of-type(21) {
+	background-color: black;
+	grid-row: 1 / span 2;
+	grid-column: 36 / span 2;
+}
+
+footer li:nth-of-type(22) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 37 / span 3;
+}
+
+footer li:nth-of-type(23) {
+	background-color: black;
+	grid-row: 1 / span 2;
+	grid-column: 39 / span 2;
+}
+
+footer li:nth-of-type(24) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 40 / span 3;
+}
+
+footer li:nth-of-type(25) {
+	background-color: white;
+	grid-row: 1 / span 3;
+	grid-column: 43 / span 3;
+}
+
+footer li:nth-of-type(odd):nth-of-type(-n+5),
+footer li:nth-of-type(n+13):nth-of-type(odd):nth-of-type(-n+17),
+footer li:nth-of-type(n+6):nth-of-type(even):nth-of-type(-n+12), li:nth-of-type(n+18):nth-of-type(even):nth-of-type(-n+24),
+footer li:nth-of-type(25)
+{
+	color: black;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	box-shadow: inset 0 10px 10px 0 grey;
+}
+
+footer li:nth-last-of-type(n+3):nth-last-of-type(odd):nth-last-of-type(-n+7),
+footer li:nth-last-of-type(n+10):nth-last-of-type(even):nth-last-of-type(-n+12),
+footer li:nth-last-of-type(n+15):nth-last-of-type(odd):nth-last-of-type(-n+19),
+footer li:nth-last-of-type(n+22):nth-last-of-type(even):nth-last-of-type(-n+24)
+{
+	color: white;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	z-index: 1;
+}
+
+footer li:active {
+	outline: 2px solid grey;
+}
+
+footer li span {
+	visibility: hidden;
+}
+
+footer li:hover span {
+	visibility: visible;
+}
+
+.note::before {
+	display: inline-block;
+	position: relative;
+  content: "";
+	border: 1px solid black;
+	border-radius: 50%;
+}
+
+.note.whole::before {
+	width: 0.7rem;
+	height: 0.9rem;
+  border-left-width: 0.5rem;
+  border-right-width: 0.5rem;
+	left: -0.3rem;
+}
+
+.note.half::before {
+	width: 1.3rem;
+	height: 0.3rem;
+  border-top-width: 0.3rem;
+  border-bottom-width: 0.3rem;
+	transform: rotatez(-25deg);
+	top: -1px;
+}
+
+.note.quarter::before {
+	width: 1.3rem;
+	height: 0.3rem;
+  border-top-width: 0.3rem;
+  border-bottom-width: 0.3rem;
+	transform: rotatez(-25deg);
+	background-color: black;
+	top: -1px;
+}
+
+.stem::after {
+	display: inline-block;
+	position: absolute;
+  content: "";
+	height: 3rem;
+  width: 2px;
+  background-color: black;
+}
+
+.down::after {
+	top: 0.8rem;
+	left: 0;
+}
+
+.up::after {
+	top: -2.7rem;
+	left: 1.3rem;
+}
+
+.c4 {
+	position: relative;
+	top: 6.5rem;
+	
+	background-image: linear-gradient(rgba(0, 0, 0, 50%) 1px, transparent 1px);
+	display: inline-block;
+	height: 2rem;
+	width: 1.6rem;
+	background-size: 100% 1rem;
+	background-repeat: no-repeat;
+	background-position: 0 0.5rem;
+}
+
+.d4 {
+	position: relative;
+	top: 6rem;
+}
+
+.e4 {
+	position: relative;
+	top: 5.6rem;
+}
+
+.f4 {
+	position: relative;
+	top: 5rem;
+}
+
+.g4 {
+	position: relative;
+	top: 4.6rem;
+}
+
+.a4 {
+	position: relative;
+	top: 4rem;
+}
+
+.b4 {
+	position: relative;
+	top: 3.4rem;
+}
+
+.c5 {
+	position: relative;
+	top: 3rem;
+}
+
+.d5 {
+	position: relative;
+	top: 2.4rem;
+}
+
+.e5 {
+	position: relative;
+	top: 2rem;
+}
+
+.f5 {
+	position: relative;
+	top: 1.4rem;
+}
+
+.g5 {
+	position: relative;
+	top: 1rem;
+}
+
+.a5 {
+	position: relative;
+	top: 0.5rem;
+	
+	background-image: linear-gradient(rgba(0, 0, 0, 50%) 1px, transparent 1px);
+	display: inline-block;
+	height: 2rem;
+	width: 1.6rem;
+	background-size: 100% 1rem;
+	background-repeat: no-repeat;
+	background-position: 0 0.5rem;
+}
+
+.b5 {
+	position: relative;
+	top: 0rem;
+	
+	background-image: linear-gradient(rgba(0, 0, 0, 50%) 1px, transparent 1px);
+	display: inline-block;
+	height: 2rem;
+	width: 1.6rem;
+	background-size: 100% 1rem;
+	background-repeat: no-repeat;
+	background-position: 0 1rem;
+}
+
+.c6 {
+	position: relative;
+	top: -0.5rem;
+	
+	background-image: linear-gradient(rgba(0, 0, 0, 50%) 1px, transparent 1px);
+	display: inline-block;
+	height: 2rem;
+	width: 1.6rem;
+	background-size: 100% 1rem;
+	background-repeat: repeat;
+	background-position: 0 0.5rem;
+}
+
+.natural::before {
+	content: "♮";
+	position: absolute;
+	top: -0.9rem;
+	left: -2rem;
+	font-size: 2rem;
+}
+
+.sharp::before {
+	content: "♯";
+	position: absolute;
+	top: -0.9rem;
+	left: -2rem;
+	font-size: 2rem;
+}
+
+.flat::before {
+	content: "♭";
+	position: absolute;
+	top: -1.2rem;
+	left: -2rem;
+	font-size: 2rem;
+}
+
+.rest.whole::before {
+	content: "";
+	display: inline-block;
+	background-color: black;
+	width: 1.2rem;
+	height: 0.5rem;
+	position: relative;
+	left: 1.5rem;
+	top: 1rem;
+}
+
+.rest.half::before {
+	content: "";
+	display: inline-block;
+	background-color: black;
+	width: 1.2rem;
+	height: 0.5rem;
+	position: relative;
+	left: 1.5rem;
+	top: 1.5rem;
+}
+
+.rest.quarter {
+	background-image: url(https://freesvg.org/img/quarter_rest.png);
+	background-size: 10rem;
+	background-position: center;
+	width: 3rem;
+	height: 5rem;
+	/*background-color: lightpink;*/
 }
