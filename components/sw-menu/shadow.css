@@ -1,0 +1,86 @@
+:host {
+	color: white;
+}
+
+section {
+	border: 1px solid grey;
+	background-color: blueviolet;
+	display: flex;
+	flex-direction: column;
+}
+
+ul:first-child {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: space-evenly;
+	flex-flow: row nowrap;
+	font-size: 1rem;
+}
+
+nav {
+	visibility: hidden;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	background-color: darkturquoise;
+	width: auto;
+	padding: 10px 25px 15px 10px;
+	z-index: 1;
+	border-radius: 5px;
+}
+
+nav::before {
+	content: "▲";
+	color: darkturquoise;
+	position: absolute;
+	top: -17px;
+	left: 15px;
+}
+
+h3 {
+	cursor: pointer;
+}
+
+nav span {
+	margin: 5px;
+	cursor: pointer;
+}
+
+nav span:hover {
+	color: blueviolet;
+}
+
+ul:first-child li:hover h3 {
+	color: darkturquoise;
+}
+
+ul:first-child li:hover nav {
+	visibility: visible;
+}
+
+ul:last-child {
+	background-color: white;
+	color: black;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 5px 10px;
+}
+
+input {
+	width: 3rem;
+}
+
+ul:last-child span {
+	font-size: 1.3rem;
+	margin: 2px;
+}
+
+ul:last-child span:hover {
+	cursor: pointer;
+}
