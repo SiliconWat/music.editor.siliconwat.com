@@ -9,21 +9,23 @@ body {
 	margin: 0;
 	width: 100vw;
 	height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 
 header {
-	height: 20%;
+	flex: 1;
 }
 
 main {
-	height: 60%;
+	flex: 8;
 	border: 1px solid grey;
 	padding: 4rem;
 	overflow: scroll;
 }
 
 footer {
-	height: 20%;
+	flex: 3;
 	border: 1px solid grey;
 	background-color: black;
 	overflow-x: scroll;
