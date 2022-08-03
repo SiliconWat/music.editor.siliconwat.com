@@ -1,3 +1,9 @@
+import { SwPlayer } from "../sw-player/element.mjs";
+customElements.define("sw-player", SwPlayer);
+
+import { SwInstrument } from "../sw-instrument/element.mjs";
+customElements.define("sw-instrument", SwInstrument);
+
 const template = document.createElement("template");
 
 template.innerHTML = `
@@ -45,31 +51,10 @@ template.innerHTML = `
                 </nav>
             </li>
         </ul>
-        <ul>
-            <li>
-                <label>Tempo: </label>
-                <input />
-            </li>
-            <li>
-                <span>▶️</span>
-                <span>⏸</span>
-                <span>⏹</span>
-            </li>
-            <li>
-                <span>Ｘ</span>
-                <span>⟲</span>
-                <span>⟳</span>
-            </li>
-            <li>
-                <span>🎹</span>
-                <span>⌨️</span>
-                <span>⎋</span>
-            </li>
-            <li>
-                <span>🎤</span>
-                <span>📷</span>
-            </li>
-        </ul>
+        <aside>
+            <sw-player></sw-player>
+            <sw-instrument></sw-instrument>
+        </aside>
     </section>
 `;
 
