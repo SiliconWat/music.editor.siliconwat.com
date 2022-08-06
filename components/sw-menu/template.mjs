@@ -41,7 +41,7 @@ template.innerHTML = `
                     <span>Quarter</span>
                 </nav>
             </li>
-            <li>
+            <!--<li>
                 <h3>Learn</h3>
                 <nav>
                     <span>Piano Playing</span>
@@ -49,12 +49,9 @@ template.innerHTML = `
                     <span>Ear Training</span>
                     <span>Rhythm Training</span>
                 </nav>
-            </li>
+            </li>-->
         </ul>
-        <aside>
-            <sw-player></sw-player>
-            <sw-instrument></sw-instrument>
-        </aside>
+        <slot></slot>
     </section>
 `;
 

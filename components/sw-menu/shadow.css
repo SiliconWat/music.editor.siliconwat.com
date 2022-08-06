@@ -62,12 +62,9 @@ ul li:hover nav {
 	visibility: visible;
 }
 
-aside {
+slot {
 	background-color: white;
 	color: black;
-	list-style: none;
-	padding: 0;
-	margin: 0;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
@@ -75,7 +72,7 @@ aside {
 }
 
 @media (max-width: 480px) {
-	aside {
+	slot {
 		flex-direction: column;
 	}
 }
