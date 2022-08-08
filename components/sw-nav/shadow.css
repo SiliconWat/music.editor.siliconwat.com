@@ -4,17 +4,12 @@
 	color: white;
 }
 
-section {
-	border: 1px solid grey;
-	background-color: blueviolet;
-	display: flex;
-	flex-direction: column;
-}
-
 ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
+	border: 1px solid grey;
+	background-color: blueviolet;
 	display: flex;
 	justify-content: space-evenly;
 	flex-flow: row nowrap;
@@ -60,19 +55,4 @@ ul li:hover h3 {
 
 ul li:hover nav {
 	visibility: visible;
-}
-
-slot {
-	background-color: white;
-	color: black;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	padding: 5px 10px;
-}
-
-@media (max-width: 480px) {
-	slot {
-		flex-direction: column;
-	}
 }

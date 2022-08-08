@@ -9,16 +9,33 @@
     </head>
     <body>
 		<header>
-			<sw-menu>
+			<sw-nav>
+				<h3 slot="menu1">Measure</h3>
+				<span slot="menu1-sub1">Add</span>
+				<span slot="menu1-sub2">Remove</span>
+				<h3 slot="menu2">Note</h3>
+				<span slot="menu2-sub1">Whole</span>
+				<span slot="menu2-sub2">Half</span>
+				<span slot="menu2-sub3">Quarter</span>
+				<h3 slot="menu3">Accidental</h3>
+				<span slot="menu3-sub1">Sharp</span>
+				<span slot="menu3-sub2">Flat</span>
+				<span slot="menu3-sub3">Natural</span>
+				<h3 slot="menu4">Rest</h3>
+				<span slot="menu4-sub1">Whole</span>
+				<span slot="menu4-sub2">Half</span>
+				<span slot="menu4-sub3">Quarter</span>
+			</sw-nav>
+			<sw-menubar>
 				<sw-player></sw-player>
-            	<sw-instrument></sw-instrument>
-			</sw-menu>
+				<sw-instrument></sw-instrument>
+			</sw-menubar>
 		</header>
 		<main>
 			<sw-editor clef="treble" tempo="120"></sw-editor>
 		</main>
 		<footer>
-			<sw-piano></sw-piano>
+			<sw-piano clef="bass" device="keyboard"></sw-piano>
 		</footer>
 	</body>
 </html>
