@@ -4,7 +4,7 @@ const template = document.createElement("template");
 template.innerHTML = `
     <link rel="stylesheet" href="${origin}/components/sw-piano/shadow.css">
     <ul>
-        <li>
+        <!--<li>
             <span>C4</span>
         </li>
         <li>
@@ -78,7 +78,7 @@ template.innerHTML = `
         </li>
         <li>
             <span>C6</span>
-        </li>
+        </li>-->
     </ul>
 `;
 

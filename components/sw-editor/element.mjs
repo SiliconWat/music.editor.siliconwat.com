@@ -11,16 +11,16 @@ export class SwEditor extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
         this.meta = { clef: "treble", keySignature: "CM", timeSignature: [4, 4], tempo: 100 };
-        this.score = [[{note: 'c5', duration: 'whole', accidental: null}, 
-                    {note: 'c5', duration: 'half', accidental: 'natural'},
-                    {note: 'c4', duration: 'quarter', accidental: 'flat'},
-                    {note: 'c6', duration: 'half', accidental: 'sharp'}],
+        this.score = [[{note: 'C5', duration: 'whole', accidental: null}, 
+                    {note: 'C5', duration: 'half', accidental: 'natural'},
+                    {note: 'C4', duration: 'quarter', accidental: 'flat'},
+                    {note: 'C6', duration: 'half', accidental: 'sharp'}],
                     [{note: 'rest', duration: 'whole'},
                     {note: 'rest', duration: 'half'},
                     {note: 'rest', duration: 'quarter'},
                     {note: null}]];
-        this.treble = ['c4', 'd4', 'e4', 'f4', 'g4', 'a4', 'b4', 'c5', 'd5', 'e5', 'f5', 'g5', 'a5', 'b5', 'c6'];
-        this.bass = ['c2', 'd2', 'e2', 'f2', 'g2', 'a2', 'b2', 'c3', 'd3', 'e3', 'f3', 'g3', 'a3', 'b3', 'c4'];
+        this.treble = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6'];
+        this.bass = ['C2', 'D2', 'E2', 'F2', 'G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4'];
     }
 
     connectedCallback() {
