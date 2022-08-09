@@ -199,3 +199,7 @@ li:active {
 li span {
 	visibility: visible;
 }
+
+img {
+	width: 20px;
+}

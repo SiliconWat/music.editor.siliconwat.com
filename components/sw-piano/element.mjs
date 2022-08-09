@@ -27,7 +27,37 @@ export class SwPiano extends HTMLElement {
         return ['C2', 'D2♭', 'D2', 'E2♭', 'E2', 'F2', 'G2♭', 'G2', 'A2♭', 'A2', 'B2♭', 'B2', 'C3', 'D3♭', 'D3', 'E3♭', 'E3', 'F3', 'G3♭', 'G3', 'A3♭', 'A3', 'B3♭', 'B3', 'C4'];
     }
 
-    static frequencyFromKey(key) {
+    //https://en.wikipedia.org/wiki/Solf%C3%A8ge#:~:text=There%20are%20two%20current%20ways,degree%20of%20the%20major%20scale.
+    static solfegeFromKey(key) { 
+        const accidental = key[2] ? key[2] : "";
+        const note = key[0] + accidental;
+        const octave = key[1];
+
+        const solfege = {
+            C: "Do",
+            "C♯": "Di",
+            "D♭": "Ra",
+            D: "Re",
+            "D♯": "Ri",
+            "E♭": "Ma", //Me
+            E: "Mi",
+            F: "Fa",
+            "F♯": "Fi",
+            "G♭": "Se",
+            G: "Sol",
+            "G♯": "Si",
+            "A♭": "Le", //Lo
+            A: "La",
+            "A♯": "Li",
+            "B♭": "Te", //Ta
+            B: "Ti"
+        }
+
+        return solfege[note];
+
+    }
+
+    static frequencyFromKey(key) { 
         const accidental = key[2] ? key[2] : "";
         const note = key[0] + accidental;
         const octave = key[1];
@@ -48,25 +78,17 @@ export class SwPiano extends HTMLElement {
         return chromaticTable[octave][enharmonicNotes[note] ? enharmonicNotes[note] : note];
     }
 
-    static aslFromKey(key) {
+    //https://en.wikipedia.org/wiki/American_Sign_Language#/media/File:Asl_alphabet_gallaudet.svg
+    //https://commons.wikimedia.org/wiki/File:Sign_language_Z.svg
+    //https://www.musictheorytutor.org/2013/03/25/solfege-hand-signs/
+    static aslFromKey(key) { 
+        const origin = window.location.hostname === '127.0.0.1' ? "http://127.0.0.1:5508" : "https://music.siliconwat.com";
+
         const accidental = key[2] ? key[2] : "";
-        const note = key[0] + accidental;
-        const octave = key[1];
+        const note = key[0];
+        const octave = key[1]; 
 
-        const enharmonicNotes = {
-            "C♯": "C♯/D♭",
-            "D♭": "C♯/D♭",
-            "D♯": "D♯/E♭",
-            "E♭": "D♯/E♭",
-            "F♯": "F♯/G♭",
-            "G♭": "F♯/G♭",
-            "G♯": "G♯/A♭",
-            "A♭": "G♯/A♭",
-            "A♯": "A♯/B♭",
-            "B♭": "A♯/B♭"
-        };
-
-        return chromaticTable[octave][enharmonicNotes[note] ? enharmonicNotes[note] : note];
+        return `${origin}/components/sw-piano/ASL/notes/${note.toLowerCase()}.svg`;
     }
 
     static get instruments() {
@@ -76,20 +98,20 @@ export class SwPiano extends HTMLElement {
                 bass: SwPiano.bass
             },
             keyboard: {
-                treble: ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', ',|q', 'l|2', '.|w', ';|3', '/|e', 'r', '5', 't', '6', 'y', '7', 'u', 'i'],
-                bass: ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', ',|q', 'l|2', '.|w', ';|3', '/|e', 'r', '5', 't', '6', 'y', '7', 'u', 'i'],
+                treble: ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', 'q<br>,', '2<br>l', '2<br>.', '3<br>;', '3<br>/', 'r', '5', 't', '6', 'y', '7', 'u', 'i'],
+                bass: ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', 'q<br>,', '2<br>l', 'w<br>.', '3<br>;', 'e<br>/', 'r', '5', 't', '6', 'y', '7', 'u', 'i'],
             },
             midi: {
                 treble: ['60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84'],
                 bass: ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60']
             },
-            voice: { //TODO: add solfege
-                treble: SwPiano.treble.map(key => Math.round(SwPiano.frequencyFromKey(key))),
-                bass: SwPiano.bass.map(key => Math.round(SwPiano.frequencyFromKey(key)))
+            voice: { 
+                treble: SwPiano.treble.map(key => [SwPiano.solfegeFromKey(key), Math.round(SwPiano.frequencyFromKey(key))]),
+                bass: SwPiano.bass.map(key => [SwPiano.solfegeFromKey(key), Math.round(SwPiano.frequencyFromKey(key))])
             },
             ASL: {
-                treble: [],
-                bass: []
+                treble: SwPiano.treble.map(key => SwPiano.aslFromKey(key)),
+                bass: SwPiano.bass.map(key => SwPiano.aslFromKey(key))
             }
         };
     }
@@ -107,13 +129,29 @@ export class SwPiano extends HTMLElement {
         SwPiano.instruments[instrument][clef].forEach(key => {
             const li = document.createElement('li');
             const span = document.createElement('span');
-            //span.innerHTML = key; // required for html entities
-            span.append(key);
+
+            switch (instrument) {
+                case "piano":
+                    span.textContent = key; // innerHTML required for html entities
+                    break;
+                case "keyboard":
+                    span.innerHTML = key;
+                    break;
+                case "midi":
+                    span.appendChild(key);
+                    break;
+                case "voice":
+                    span.append(key[0], document.createElement('br'), key[1]);
+                    break;
+                case "ASL":
+                    const img = document.createElement('img');
+                    img.src = key;
+                    span.append(img);
+            }
+
             li.append(span);
             ul.append(li);
         });
     }
     
 }
-
-// https://commons.wikimedia.org/wiki/File:Sign_language_Z.svg
