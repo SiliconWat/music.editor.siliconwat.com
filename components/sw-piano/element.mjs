@@ -116,11 +116,18 @@ export class SwPiano extends HTMLElement {
         };
     }
 
+    static get observedAttributes() {
+        return ['instrument', 'clef'];
+    }
+
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
-        this.render('voice', 'bass');
+    }
+
+    connectedCallback() {
+        if (!this.hasAttribute('instrument') && !this.hasAttribute('clef')) this.render('piano', 'treble');
     }
 
     render(instrument, clef) {
@@ -128,6 +135,7 @@ export class SwPiano extends HTMLElement {
         ul.replaceChildren();
         SwPiano.instruments[instrument][clef].forEach(key => {
             const li = document.createElement('li');
+            li.onclick = () => this.dispatchEvent(new CustomEvent("sw-key", { bubbles: true, composed: true, detail: {instrument, clef, key }}));
             const span = document.createElement('span');
 
             switch (instrument) {
@@ -138,7 +146,7 @@ export class SwPiano extends HTMLElement {
                     span.innerHTML = key;
                     break;
                 case "midi":
-                    span.appendChild(key);
+                    span.appendChild(document.createTextNode(key));
                     break;
                 case "voice":
                     span.append(key[0], document.createElement('br'), key[1]);
@@ -147,11 +155,32 @@ export class SwPiano extends HTMLElement {
                     const img = document.createElement('img');
                     img.src = key;
                     span.append(img);
+                    break;
             }
 
             li.append(span);
             ul.append(li);
         });
+    }
+
+    get instrument() {
+        return this.getAttribute('instrument');
+    }
+
+    set instrument(value) {
+        this.setAttribute('instrument', value);
+    }
+
+    get clef() {
+        return this.getAttribute('clef');
+    }
+
+    set clef(value) {
+        this.setAttribute('clef', value);
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue !== oldValue) this.render(this.getAttribute('instrument') || "piano", this.getAttribute('clef') || "treble");
     }
     
 }

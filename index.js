@@ -16,6 +16,12 @@ customElements.define("sw-editor", SwEditor);
 import { SwPiano } from "/components/sw-piano/element.mjs";
 customElements.define("sw-piano", SwPiano);
 
+const SWPianoElement = document.querySelector('sw-piano');
+window.addEventListener('sw-instrument', event => {
+    SWPianoElement.instrument = event.detail.instrument;
+});
+
+window.addEventListener('sw-key', event => console.log(event.detail));
 
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}

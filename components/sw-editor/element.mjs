@@ -24,10 +24,10 @@ export class SwEditor extends HTMLElement {
     }
 
     connectedCallback() {
-        this.render();
+        if (!this.hasAttribute('clef') && !this.hasAttribute('tempo')) this.render();
 
         this.shadowRoot.querySelector('section').onclick = () => {
-            this.dispatchEvent(new Event('correct', { bubbles: true, composed: true }));
+            this.dispatchEvent(new Event('sw-correct', { bubbles: true, composed: true }));
         }
     }
 
@@ -66,35 +66,27 @@ export class SwEditor extends HTMLElement {
         });
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (newValue !== oldValue) {
-            if (name === 'clef') this.clefHasChanged();
-            if (name === 'tempo') this.tempoHasChanged();
-            this.render();
-        }
+    get clef() {
+        return this.getAttribute('clef');
     }
 
     set clef(value) {
         this.setAttribute('clef', value);
     }
 
-    get clef() {
-        return this.getAttribute('clef');
-    }
-
-    clefHasChanged() {
-        this.meta.clef = this.getAttribute('clef');
+    get tempo() {
+        return this.getAttribute('tempo');
     }
 
     set tempo(value) {
         this.setAttribute('tempo', value);
     }
 
-    get tempo() {
-        return this.getAttribute('tempo');
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue !== oldValue) {
+            this.meta[name] = newValue;
+            this.render();
+        }
     }
-
-    tempoHasChanged() {
-        this.meta.tempo = this.getAttribute('tempo');
-    }
+    
 }

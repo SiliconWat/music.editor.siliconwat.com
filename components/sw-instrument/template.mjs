@@ -4,11 +4,11 @@ const template = document.createElement("template");
 template.innerHTML = `
     <link rel="stylesheet" href="${origin}/components/sw-instrument/shadow.css">
     <ul>
-        <li>🎹</li>
-        <li>⌨️</li>
-        <li>⎋</li>
-        <li>🎤</li>
-        <li>📷</li>
+        <li id="piano">🎹</li>
+        <li id="keyboard">⌨️</li>
+        <li id="midi">⎋</li>
+        <li id="voice">🎤</li>
+        <li id="ASL">📷</li>
     </ul>
 `;
 
