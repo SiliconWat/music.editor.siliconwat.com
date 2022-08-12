@@ -95,6 +95,6 @@ ol:not(:first-child) li:before {
 	visibility: hidden;
 }
 
-ol:not(:first-child) li:active:before {
+ol:not(:first-child) li.pointer:before {
 	visibility: visible;
 }

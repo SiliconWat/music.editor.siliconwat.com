@@ -21,7 +21,8 @@ window.addEventListener('sw-instrument', event => {
     SWPianoElement.instrument = event.detail.instrument;
 });
 
-window.addEventListener('sw-key', event => console.log(event.detail));
+const SWEditorElement = document.querySelector('sw-editor');
+window.addEventListener('sw-key', event => SWEditorElement.updateNote(event.detail.note));
 
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}

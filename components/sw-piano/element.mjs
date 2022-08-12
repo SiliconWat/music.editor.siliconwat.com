@@ -133,9 +133,9 @@ export class SwPiano extends HTMLElement {
     render(instrument, clef) {
         const ul = this.shadowRoot.querySelector('ul');
         ul.replaceChildren();
-        SwPiano.instruments[instrument][clef].forEach(key => {
+        SwPiano.instruments[instrument][clef].forEach((key, index) => {
             const li = document.createElement('li');
-            li.onclick = () => this.dispatchEvent(new CustomEvent("sw-key", { bubbles: true, composed: true, detail: {instrument, clef, key }}));
+            li.onclick = () => this.dispatchEvent(new CustomEvent("sw-key", { bubbles: true, composed: true, detail: {instrument, clef, key, note: SwPiano[clef][index] }}));
             const span = document.createElement('span');
 
             switch (instrument) {

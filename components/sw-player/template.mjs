@@ -7,9 +7,10 @@ template.innerHTML = `
         <li>▶️</li>
         <li>⏸</li>
         <li>⏹</li>
+        <li>📑</li>
+        <li>📋</li>
         <li>Ｘ</li>
-        <li>⟲</li>
-        <li>⟳</li>
+        <li>🆕</li>
     </ul>
 `;
 

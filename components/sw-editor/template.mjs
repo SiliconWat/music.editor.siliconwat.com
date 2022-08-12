@@ -5,25 +5,25 @@ template.innerHTML = `
     <link rel="stylesheet" href="${origin}/components/sw-editor/sheets.css">
     <link rel="stylesheet" href="${origin}/components/sw-editor/notes.css">
     <section>
-        <ol class="treble"></ol>
+        <!--<ol class="treble"></ol>
         <ol>
             <li>
-                <div class="note whole c5">
+                <div class="note whole C5">
                     <span class="sharp"></span>
                 </div>
             </li>
             <li>
-                <div class="note half c5 stem down">
+                <div class="note half C5 stem down">
                     <span class="natural"></span>
                 </div>
             </li>
             <li>
-                <div class="note quarter c4 stem up">
+                <div class="note quarter C4 stem up">
                     <span class="flat"></span>
                 </div>
             </li>
             <li>
-                <div class="note half c6 stem down">
+                <div class="note half C6 stem down">
                     <span class="sharp"></span>
                 </div>
             </li>
@@ -38,9 +38,7 @@ template.innerHTML = `
             <li>
                 <div class="rest quarter"></div>
             </li>
-            <li>
-                <div class=""></div>
-            </li>
+            <li></li>
         </ol>
         <ol>
         </ol>
@@ -59,7 +57,7 @@ template.innerHTML = `
         <ol>
         </ol>
         <ol>
-        </ol>
+        </ol>-->
     </section>
 `;
 

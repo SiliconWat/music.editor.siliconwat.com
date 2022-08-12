@@ -36,20 +36,20 @@ nav::before {
 	left: 15px;
 }
 
-h3 {
+::slotted(h3) {
 	cursor: pointer;
 }
 
-nav span {
+nav ::slotted(span) {
 	margin: 5px;
 	cursor: pointer;
 }
 
-nav span:hover {
+nav ::slotted(span:hover) {
 	color: blueviolet;
 }
 
-ul li:hover h3 {
+ul li:hover ::slotted(h3) {
 	color: darkturquoise;
 }
 
