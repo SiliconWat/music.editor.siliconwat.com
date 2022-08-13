@@ -1,7 +1,8 @@
 export async function updateFromPlayer(player) {
-    switch (player.action) {
+    if (player.tempo) this.updateTempo(player.tempo)
+    else switch (player.action) {
         case "play":
-            this.play(player.tempo);
+            this.play();
             break;
         case "pause":
             this.pause();
@@ -21,7 +22,11 @@ export async function updateFromPlayer(player) {
         case "new":
             this.clear();
             break;
-    }
+    };
+}
+
+export function updateTempo(tempo) {
+    this.setAttribute('tempo', tempo);
 }
 
 export async function copy() {

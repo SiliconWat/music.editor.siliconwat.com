@@ -3,7 +3,7 @@ const template = document.createElement("template");
 template.innerHTML = `
     <link rel="stylesheet" href="components/sw-player/shadow.css">
     <ul>
-        <li><input placeholder="Tempo"></li>
+        <li><input type="number" placeholder="Tempo"></li>
         <li id="play">▶️</li>
         <li id="pause">⏸</li>
         <li id="stop">⏹</li>
