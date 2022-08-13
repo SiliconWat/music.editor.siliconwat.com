@@ -37,7 +37,7 @@ export class SwEditor extends HTMLElement {
         if (!this.hasAttribute('clef') && !this.hasAttribute('tempo')) this.render();
 
         this.shadowRoot.querySelector('section').onclick = () => {
-            this.dispatchEvent(new Event('sw-correct', { bubbles: true, composed: true }));
+            this.dispatchEvent(new CustomEvent('sw-editor', { bubbles: true, composed: true, detail: { answer: true } }));
         }
     }
 
@@ -84,7 +84,7 @@ export class SwEditor extends HTMLElement {
         this.meta.pointer = [measure, beat];
     }
 
-    updateNote(key) {
+    updateFromPiano(key) {
         if (this.meta.pointer) {
             const li = this.shadowRoot.getElementById(`sw-${this.meta.pointer[0]}-${this.meta.pointer[1]}`);
             const accidentals = {"♯": "sharp", "♭": "flat", "♮": "natural"}
@@ -118,6 +118,39 @@ export class SwEditor extends HTMLElement {
             }             
             beat.accidental = accidental;
         }
+    }
+
+    updateFromNav(nav) {
+        switch (nav.menu) {
+            case "Measure":
+                this.updateMeasure(nav.submenu);
+                break;
+            case "Note":
+                this.updateNote(nav.submenu);
+                break;
+            case "Accidental":
+                this.updateAccidental(nav.submenu);
+                break;
+            case "Rest":
+                this.updateRest(nav.submenu);
+                break;
+        }
+    }
+
+    updateMeasure(submenu) {
+        const measure = this.meta.pointer ? this.meta.pointer[0] : this[this.meta.clef].score.length - 1;
+
+        switch (submenu) {
+            case "Add":
+                this[this.meta.clef].score.splice(measure + 1, 0, [{}, {}, {}, {}]);
+                break;
+            case "Remove":
+                this[this.meta.clef].score.splice(measure, 1);
+                break;
+        }
+
+        this.meta.pointer = null;
+        this.render();
     }
 
     get clef() {

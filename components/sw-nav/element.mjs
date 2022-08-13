@@ -30,6 +30,8 @@ export class SwNav extends HTMLElement {
                 } 
                 const slot = document.createElement('slot');
                 slot.name = `menu${menu}-sub${submenu++}`;
+                let m = menu; // need closure
+                slot.onclick = () => this.dispatchEvent(new CustomEvent("sw-nav", { bubbles: true, composed: true, detail: { menu: this.querySelector(`h3[slot=menu${m}]`).textContent, submenu: element.textContent }}));
                 nav.append(slot);
             }
         }
