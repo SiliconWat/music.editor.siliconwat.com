@@ -5,10 +5,10 @@ export class SwNav extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
-        this.createTemplate();
+        this.#createTemplate();
     }
 
-    createTemplate() {
+    #createTemplate() {
         const ul = this.shadowRoot.querySelector('ul');
         let menu = 0;
         let submenu = 1;

@@ -1,6 +1,6 @@
 import template from './template.mjs';
-import { setPointer, updateFromPiano, updateFromNav, updateMeasure } from './note.mjs';
-import { updateFromPlayer, play } from "./player.mjs";
+import * as noteProperties from './note.mjs';
+import * as playerProperties from "./player.mjs";
 
 export class SwEditor extends HTMLElement {
     static get observedAttributes() {
@@ -105,7 +105,5 @@ export class SwEditor extends HTMLElement {
     
 }
 
-SwEditor.prototype.updateFromPlayer = updateFromPlayer;
-SwEditor.prototype.play = play;
-
-Object.assign(SwEditor.prototype, { setPointer, updateFromPiano, updateFromNav, updateMeasure });
+//SwEditor.prototype.updateFromPlayer = updateFromPlayer;
+Object.assign(SwEditor.prototype, noteProperties, playerProperties);
