@@ -58,26 +58,31 @@ export class SwEditor extends HTMLElement {
                 li.id = `sw-${m}-${b}`;
                 li.onclick = () => this.setPointer(m, b);
                 ol.append(li);
-
-                if (beat.note) {
-                    const div = document.createElement('div');
-                    div.classList.add(beat.duration)
-                    if (beat.note === 'rest') div.classList.add('rest');
-                    else { 
-                        div.classList.add('note', beat.note);
-                        if (beat.duration !== 'whole') div.classList.add('stem', this[this.meta.clef].notes.indexOf(beat.note) < 6 ? 'up' : 'down');
-                    }
-                    li.append(div);
-
-                    if (beat.accidental) {
-                        const span = document.createElement('span');
-                        span.classList.add(beat.accidental);
-                        div.append(span);
-                    }
-                }
+                this.renderBeat(li, beat);
             });
             section.append(ol);
         });
+    }
+
+    renderBeat(li, beat) {
+        if (beat.note) {
+            const div = document.createElement('div');
+            div.classList.add(beat.duration)
+
+            if (beat.note === 'rest') div.classList.add('rest');
+            else { 
+                div.classList.add('note', beat.note);
+                if (beat.duration !== 'whole') div.classList.add('stem', this[this.meta.clef].notes.indexOf(beat.note) < 6 ? 'up' : 'down');
+            }
+
+            if (beat.accidental) {
+                const span = document.createElement('span');
+                span.classList.add(beat.accidental);
+                div.append(span);
+            }
+
+            li.append(div);
+        }
     }
 
     get clef() {

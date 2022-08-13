@@ -69,6 +69,6 @@ export function updateMeasure(submenu) {
             break;
     }
 
-    this.meta.pointer = null;
-    this.render();
+    this.meta.pointer = null; //todo later: reset pointer to new position?
+    this.render(); //todo later: render only the measure? prob not bc li#id
 }
