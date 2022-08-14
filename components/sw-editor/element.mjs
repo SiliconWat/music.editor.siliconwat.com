@@ -12,26 +12,26 @@ export class SwEditor extends HTMLElement {
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-        this.meta = { pointer: null, clef: "treble", keySignature: "CM", timeSignature: [4, 4], tempo: 100 };
-
-        this.treble = {
-            notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6'],
-            score: [
-                [{note: 'C5', duration: 'whole', accidental: null}, 
-                    {note: 'C5', duration: 'half', accidental: 'natural'},
-                    {note: 'C4', duration: 'quarter', accidental: 'flat'},
-                    {note: 'C6', duration: 'half', accidental: 'sharp'}],
-                [{note: 'rest', duration: 'whole'},
-                    {note: 'rest', duration: 'half'},
-                    {note: 'rest', duration: 'quarter'},
-                    {}],
-                    [{}, {}, {}, {}]
-            ]
-        }
-        
-        this.bass = {
-            notes: ['C2', 'D2', 'E2', 'F2', 'G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4'],
-            score: []
+        this.staff = { pointer: null, clef: "treble", keySignature: "CM", timeSignature: [4, 4], tempo: 100 };
+        this.score = {
+            treble: {
+                scale: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6'],
+                notes: [
+                    [{pitch: 'C5', duration: 'whole', accidental: null}, 
+                        {pitch: 'C5', duration: 'half', accidental: 'natural'},
+                        {pitch: 'C4', duration: 'quarter', accidental: 'flat'},
+                        {pitch: 'C6', duration: 'half', accidental: 'sharp'}],
+                    [{pitch: 'rest', duration: 'whole'},
+                        {pitch: 'rest', duration: 'half'},
+                        {pitch: 'rest', duration: 'quarter'},
+                        {}],
+                        [{}, {}, {}, {}]
+                ]
+            },
+            bass: {
+                scale: ['C2', 'D2', 'E2', 'F2', 'G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4'],
+                notes: []
+            }
         }
     }
 
@@ -48,36 +48,36 @@ export class SwEditor extends HTMLElement {
         section.replaceChildren();
         
         const ol = document.createElement('ol');
-        ol.classList.add(this.meta.clef);
+        ol.classList.add(this.staff.clef);
         section.append(ol);
 
-        this[this.meta.clef].score.forEach((measure, m) => {
+        this.score[this.staff.clef].notes.forEach((measure, m) => {
             const ol = document.createElement('ol');
-            measure.forEach((beat, b) => {
+            measure.forEach((note, n) => {
                 const li = document.createElement('li');
-                li.id = `sw-${m}-${b}`;
-                li.onclick = () => this.setPointer(m, b);
+                li.id = `sw-${m}-${n}`;
+                li.onclick = () => this.setPointer(m, n);
                 ol.append(li);
-                this.renderBeat(li, beat);
+                this.renderNote(li, note);
             });
             section.append(ol);
         });
     }
 
-    renderBeat(li, beat) {
-        if (beat.note) {
+    renderNote(li, note) {
+        if (note.pitch) {
             const div = document.createElement('div');
-            div.classList.add(beat.duration)
+            div.classList.add(note.duration)
 
-            if (beat.note === 'rest') div.classList.add('rest');
+            if (note.pitch === 'rest') div.classList.add('rest');
             else { 
-                div.classList.add('note', beat.note);
-                if (beat.duration !== 'whole') div.classList.add('stem', this[this.meta.clef].notes.indexOf(beat.note) < 6 ? 'up' : 'down');
+                div.classList.add('note', note.pitch);
+                if (note.duration !== 'whole') div.classList.add('stem', this.score[this.staff.clef].scale.indexOf(note.pitch) < 6 ? 'up' : 'down');
             }
 
-            if (beat.accidental) {
+            if (note.accidental) {
                 const span = document.createElement('span');
-                span.classList.add(beat.accidental);
+                span.classList.add(note.accidental);
                 div.append(span);
             }
 
@@ -85,10 +85,10 @@ export class SwEditor extends HTMLElement {
         }
     }
 
-    setPointer(measure, beat) {
-        if (this.meta.pointer) this.shadowRoot.getElementById(`sw-${this.meta.pointer[0]}-${this.meta.pointer[1]}`).classList.remove('pointer');
-        this.shadowRoot.getElementById(`sw-${measure}-${beat}`).classList.add('pointer');
-        this.meta.pointer = [measure, beat];
+    setPointer(measure, note) {
+        if (this.staff.pointer) this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`).classList.remove('pointer');
+        this.shadowRoot.getElementById(`sw-${measure}-${note}`).classList.add('pointer');
+        this.staff.pointer = [measure, note];
     }
 
     get clef() {
@@ -109,7 +109,7 @@ export class SwEditor extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (newValue !== oldValue) {
-            this.meta[name] = newValue;
+            this.staff[name] = newValue;
             if (name === 'clef') this.render();
         }
     }

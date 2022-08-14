@@ -21,7 +21,7 @@ const SWPianoElement = document.querySelector('sw-piano');
 window.addEventListener('sw-nav', event => SWEditorElement.updateFromNav(event.detail));
 window.addEventListener('sw-player', event => SWEditorElement.updateFromPlayer(event.detail));
 window.addEventListener('sw-instrument', event => SWPianoElement.instrument = event.detail.instrument);
-window.addEventListener('sw-piano', event => SWEditorElement.updateFromPiano(event.detail.note));
+window.addEventListener('sw-piano', event => SWEditorElement.updateFromPiano(event.detail.pitch));
 
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}

@@ -30,30 +30,30 @@ export function updateTempo(tempo) {
 }
 
 export async function copy() {
-    if (this.meta.pointer) await navigator.clipboard.writeText(JSON.stringify(this[this.meta.clef].score[this.meta.pointer[0]][this.meta.pointer[1]]));
+    if (this.staff.pointer) await navigator.clipboard.writeText(JSON.stringify(this.score[this.staff.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]]));
 }
 
 export async function paste() {
-    if (this.meta.pointer) {
-        const beat = JSON.parse(await navigator.clipboard.readText());
-        const li = this.shadowRoot.getElementById(`sw-${this.meta.pointer[0]}-${this.meta.pointer[1]}`);
+    if (this.staff.pointer) {
+        const note = JSON.parse(await navigator.clipboard.readText());
+        const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
         li.replaceChildren();
-        this.renderBeat(li, beat);
-        this[this.meta.clef].score[this.meta.pointer[0]][this.meta.pointer[1]] = beat;
+        this.renderNote(li, note);
+        this.score[this.staff.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]] = note;
     }
 }
 
 export function remove() {
-    if (this.meta.pointer) {
-        const li = this.shadowRoot.getElementById(`sw-${this.meta.pointer[0]}-${this.meta.pointer[1]}`);
+    if (this.staff.pointer) {
+        const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
         li.replaceChildren();
-        this[this.meta.clef].score[this.meta.pointer[0]][this.meta.pointer[1]] = {};
+        this.score[this.staff.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]] = {};
     }
 }
 
 export function clear() {
     if (window.confirm("Are you sure you want to delete this entire score?")) {
-        this[this.meta.clef].score = [];
+        this.score[this.staff.clef].notes = [];
         this.render();
     }
 }
