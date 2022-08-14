@@ -85,6 +85,12 @@ export class SwEditor extends HTMLElement {
         }
     }
 
+    setPointer(measure, beat) {
+        if (this.meta.pointer) this.shadowRoot.getElementById(`sw-${this.meta.pointer[0]}-${this.meta.pointer[1]}`).classList.remove('pointer');
+        this.shadowRoot.getElementById(`sw-${measure}-${beat}`).classList.add('pointer');
+        this.meta.pointer = [measure, beat];
+    }
+
     get clef() {
         return this.getAttribute('clef');
     }

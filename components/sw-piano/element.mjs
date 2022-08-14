@@ -22,7 +22,7 @@ export class SwPiano extends HTMLElement {
 
     //https://en.wikipedia.org/wiki/Solf%C3%A8ge#:~:text=There%20are%20two%20current%20ways,degree%20of%20the%20major%20scale.
     static #solfegeFromKey(key) { 
-        const accidental = key[2] ? key[2] : "";
+        const accidental = key[2] || "";
         const note = key[0] + accidental;
         const octave = key[1];
 
@@ -51,7 +51,7 @@ export class SwPiano extends HTMLElement {
     }
 
     static #frequencyFromKey(key) { 
-        const accidental = key[2] ? key[2] : "";
+        const accidental = key[2] || "";
         const note = key[0] + accidental;
         const octave = key[1];
 
@@ -68,7 +68,7 @@ export class SwPiano extends HTMLElement {
             "B♭": "A♯/B♭"
         };
 
-        return SwPiano.#chromaticTable[octave][enharmonicNotes[note] ? enharmonicNotes[note] : note];
+        return SwPiano.#chromaticTable[octave][enharmonicNotes[note] || note];
     }
 
     //https://en.wikipedia.org/wiki/American_Sign_Language#/media/File:Asl_alphabet_gallaudet.svg
@@ -77,7 +77,7 @@ export class SwPiano extends HTMLElement {
     static #aslFromKey(key) { 
         const origin = window.location.hostname === '127.0.0.1' ? "http://127.0.0.1:5508" : "https://music.siliconwat.com";
 
-        const accidental = key[2] ? key[2] : "";
+        const accidental = key[2] || "";
         const note = key[0];
         const octave = key[1]; 
 
@@ -129,7 +129,7 @@ export class SwPiano extends HTMLElement {
         ul.replaceChildren();
         SwPiano.instruments[instrument][clef].forEach((key, index) => {
             const li = document.createElement('li');
-            li.onclick = () => this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, note: SwPiano[clef][index] }}));
+            li.onclick = () => this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, note: eval(`SwPiano.#${clef}`)[index] }}));
             const span = document.createElement('span');
 
             switch (instrument) {
