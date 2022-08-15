@@ -16,12 +16,12 @@ customElements.define("sw-editor", SwEditor);
 import { SwPiano } from "/components/sw-piano/element.mjs";
 customElements.define("sw-piano", SwPiano);
 
-const SWEditorElement = document.querySelector('sw-editor');
-const SWPianoElement = document.querySelector('sw-piano');
-window.addEventListener('sw-nav', event => SWEditorElement.updateFromNav(event.detail));
-window.addEventListener('sw-player', event => SWEditorElement.updateFromPlayer(event.detail));
-window.addEventListener('sw-instrument', event => SWPianoElement.instrument = event.detail.instrument);
-window.addEventListener('sw-piano', event => SWEditorElement.updateFromPiano(event.detail.pitch));
+const SwEditorElement = document.querySelector('sw-editor');
+const SwPianoElement = document.querySelector('sw-piano');
+window.addEventListener('sw-nav', event => SwEditorElement.updateFromNav(event.detail));
+window.addEventListener('sw-player', event => SwEditorElement.updateFromPlayer(event.detail));
+window.addEventListener('sw-instrument', event => SwPianoElement.instrument = event.detail.instrument);
+window.addEventListener('sw-piano', event => SwEditorElement.updateFromPiano(event.detail.pitch));
 
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}

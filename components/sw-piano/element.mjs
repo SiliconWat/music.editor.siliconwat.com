@@ -1,24 +1,10 @@
 import template from './template.mjs';
+import { chromaticTable } from '../music.mjs';
 
 export class SwPiano extends HTMLElement {
+    static #chromaticTable = chromaticTable(440);
     static #treble = ['C4', 'C4♯', 'D4', 'D4♯', 'E4', 'F4', 'F4♯', 'G4', 'G4♯', 'A4', 'A4♯', 'B4', 'C5', 'C5♯', 'D5', 'D5♯', 'E5', 'F5', 'F5♯', 'G5', 'G5♯', 'A5', 'A5♯', 'B5', 'C6'];
     static #bass = ['C2', 'D2♭', 'D2', 'E2♭', 'E2', 'F2', 'G2♭', 'G2', 'A2♭', 'A2', 'B2♭', 'B2', 'C3', 'D3♭', 'D3', 'E3♭', 'E3', 'F3', 'G3♭', 'G3', 'A3♭', 'A3', 'B3♭', 'B3', 'C4'];
-
-    static #chromaticTable = (() => {
-        let frequency = 16.054296052536703 // C0
-        const chromaticTable = []
-        const notes = ["C", "C♯/D♭", "D", "D♯/E♭", "E", "F", "F♯/G♭", "G", "G♯/A♭", "A", "A♯/B♭", "B"]
-        
-        for (let i = 0; i < 8; i++) {
-            chromaticTable.push({})
-            for (let j = 0; j < 12; j++) {
-                chromaticTable[i][notes[j]] = frequency
-                frequency *= 2**(1/12)
-            }
-        }
-        
-        return chromaticTable
-    })();
 
     //https://en.wikipedia.org/wiki/Solf%C3%A8ge#:~:text=There%20are%20two%20current%20ways,degree%20of%20the%20major%20scale.
     static #solfegeFromKey(key) { 
@@ -117,7 +103,7 @@ export class SwPiano extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
-        //console.log(SWPiano.chromaticTable)
+        //console.log(SwPiano.#chromaticTable)
     }
 
     connectedCallback() {

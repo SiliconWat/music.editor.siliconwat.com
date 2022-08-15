@@ -1,8 +1,11 @@
 import template from './template.mjs';
+import { chromaticTable } from '../music.mjs';
 import * as noteProperties from './note.mjs';
 import * as playerProperties from "./player.mjs";
 
 export class SwEditor extends HTMLElement {
+    static #chromaticTable = chromaticTable(432);
+
     static get observedAttributes() {
         return ['clef', 'tempo'];
     }
