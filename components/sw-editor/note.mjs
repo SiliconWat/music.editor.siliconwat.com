@@ -72,11 +72,12 @@ export function updateRest(duration) {
     }
 }
 
-export function updateFromPiano(key) {
+export function updateFromPiano(piano) {
+    //piano.audio.play();
     if (this.staff.pointer) {
-        const pitch = key.substring(0, 2);
+        const pitch = piano.pitch.substring(0, 2);
         const accidentals = {"♯": "sharp", "♭": "flat", "♮": "natural"};
-        const accidental = accidentals[key[2]] || null;
+        const accidental = accidentals[piano.pitch[2]] || null;
         
         const note = this.score[this.staff.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
         const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);

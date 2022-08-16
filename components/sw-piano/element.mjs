@@ -1,73 +1,37 @@
 import template from './template.mjs';
-import { chromaticTable } from '../music.mjs';
+import { MusicLibrary } from '/library/music.mjs';
 
 export class SwPiano extends HTMLElement {
-    static #chromaticTable = chromaticTable(440);
+    static #musicLibrary = new MusicLibrary(440);
     static #treble = ['C4', 'C4♯', 'D4', 'D4♯', 'E4', 'F4', 'F4♯', 'G4', 'G4♯', 'A4', 'A4♯', 'B4', 'C5', 'C5♯', 'D5', 'D5♯', 'E5', 'F5', 'F5♯', 'G5', 'G5♯', 'A5', 'A5♯', 'B5', 'C6'];
     static #bass = ['C2', 'D2♭', 'D2', 'E2♭', 'E2', 'F2', 'G2♭', 'G2', 'A2♭', 'A2', 'B2♭', 'B2', 'C3', 'D3♭', 'D3', 'E3♭', 'E3', 'F3', 'G3♭', 'G3', 'A3♭', 'A3', 'B3♭', 'B3', 'C4'];
 
-    //https://en.wikipedia.org/wiki/Solf%C3%A8ge#:~:text=There%20are%20two%20current%20ways,degree%20of%20the%20major%20scale.
-    static #solfegeFromKey(key) { 
+    static #frequencyFromKey(key) {
         const accidental = key[2] || "";
         const note = key[0] + accidental;
         const octave = key[1];
-
-        const solfege = {
-            C: "Do",
-            "C♯": "Di",
-            "D♭": "Ra",
-            D: "Re",
-            "D♯": "Ri",
-            "E♭": "Ma", //Me
-            E: "Mi",
-            F: "Fa",
-            "F♯": "Fi",
-            "G♭": "Se",
-            G: "Sol",
-            "G♯": "Si",
-            "A♭": "Le", //Lo
-            A: "La",
-            "A♯": "Li",
-            "B♭": "Te", //Ta
-            B: "Ti"
-        }
-
-        return solfege[note];
-
+        return SwPiano.#musicLibrary.frequency(octave, note);
     }
 
-    static #frequencyFromKey(key) { 
+    static #audioFromKey(key) { 
+        const accidental = key[2] || "";
+        const note = key[0] + accidental;
+        const octave = key[1]; 
+        return SwPiano.#musicLibrary.audio(octave, note);
+    }
+
+     static #solfegeFromKey(key) { 
         const accidental = key[2] || "";
         const note = key[0] + accidental;
         const octave = key[1];
-
-        const enharmonicNotes = {
-            "C♯": "C♯/D♭",
-            "D♭": "C♯/D♭",
-            "D♯": "D♯/E♭",
-            "E♭": "D♯/E♭",
-            "F♯": "F♯/G♭",
-            "G♭": "F♯/G♭",
-            "G♯": "G♯/A♭",
-            "A♭": "G♯/A♭",
-            "A♯": "A♯/B♭",
-            "B♭": "A♯/B♭"
-        };
-
-        return SwPiano.#chromaticTable[octave][enharmonicNotes[note] || note];
+        return SwPiano.#musicLibrary.solfege(octave, note);
     }
 
-    //https://en.wikipedia.org/wiki/American_Sign_Language#/media/File:Asl_alphabet_gallaudet.svg
-    //https://commons.wikimedia.org/wiki/File:Sign_language_Z.svg
-    //https://www.musictheorytutor.org/2013/03/25/solfege-hand-signs/
     static #aslFromKey(key) { 
-        const origin = window.location.hostname === '127.0.0.1' ? "http://127.0.0.1:5508" : "https://music.siliconwat.com";
-
         const accidental = key[2] || "";
         const note = key[0];
         const octave = key[1]; 
-
-        return `${origin}/components/sw-piano/ASL/notes/${note.toLowerCase()}.svg`;
+        return SwPiano.#musicLibrary.asl(octave, note);
     }
 
     static get instruments() {
@@ -103,10 +67,11 @@ export class SwPiano extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
-        //console.log(SwPiano.#chromaticTable)
     }
 
     connectedCallback() {
+        window.onkeyup = () => {}; // detect keyboard
+        //todo: detect midi, mic, cam
         if (!this.hasAttribute('instrument') && !this.hasAttribute('clef')) this.render('piano', 'treble');
     }
 
@@ -115,7 +80,8 @@ export class SwPiano extends HTMLElement {
         ul.replaceChildren();
         SwPiano.instruments[instrument][clef].forEach((key, index) => {
             const li = document.createElement('li');
-            li.onclick = () => this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, pitch: eval(`SwPiano.#${clef}`)[index] }}));
+            const pitch = eval(`SwPiano.#${clef}`)[index];
+            li.onclick = () => this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, pitch, audio: SwPiano.#audioFromKey(pitch) }}));
             const span = document.createElement('span');
 
             switch (instrument) {

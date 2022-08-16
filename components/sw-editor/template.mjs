@@ -1,9 +1,9 @@
-const origin = window.location.hostname === '127.0.0.1' ? "http://127.0.0.1:5508" : "https://music.siliconwat.com";
+import { ORIGIN } from "/library/music.mjs";
 const template = document.createElement("template");
 
 template.innerHTML = `
-    <link rel="stylesheet" href="${origin}/components/sw-editor/sheets.css">
-    <link rel="stylesheet" href="${origin}/components/sw-editor/notes.css">
+    <link rel="stylesheet" href="${ORIGIN}/components/sw-editor/sheets.css">
+    <link rel="stylesheet" href="${ORIGIN}/components/sw-editor/notes.css">
     <section>
         <!--<ol class="treble"></ol>
         <ol>

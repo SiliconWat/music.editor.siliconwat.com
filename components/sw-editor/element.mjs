@@ -1,11 +1,9 @@
 import template from './template.mjs';
-import { chromaticTable } from '../music.mjs';
+import { MusicLibrary } from '/library/music.mjs';
 import * as noteProperties from './note.mjs';
 import * as playerProperties from "./player.mjs";
 
 export class SwEditor extends HTMLElement {
-    static #chromaticTable = chromaticTable(432);
-
     static get observedAttributes() {
         return ['clef', 'tempo'];
     }
@@ -15,6 +13,7 @@ export class SwEditor extends HTMLElement {
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
+        this.musicLibrary = new MusicLibrary(432);
         this.staff = { pointer: null, clef: "treble", keySignature: "CM", timeSignature: [4, 4], tempo: 100 };
         this.score = {
             treble: {
