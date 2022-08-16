@@ -5,7 +5,7 @@ import * as playerProperties from "./player.mjs";
 
 export class SwEditor extends HTMLElement {
     static get observedAttributes() {
-        return ['clef', 'tempo'];
+        return ['clef'];
     }
     
     constructor() {
@@ -38,7 +38,7 @@ export class SwEditor extends HTMLElement {
     }
 
     connectedCallback() {
-        if (!this.hasAttribute('clef') && !this.hasAttribute('tempo')) this.render();
+        if (!this.hasAttribute('clef')) this.render();
 
         this.shadowRoot.querySelector('section').onclick = () => {
             this.dispatchEvent(new CustomEvent('sw-editor', { bubbles: true, composed: true, detail: { answer: true } }));
@@ -112,7 +112,7 @@ export class SwEditor extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if (newValue !== oldValue) {
             this.staff[name] = newValue;
-            if (name === 'clef') this.render();
+            this.render();
         }
     }
     

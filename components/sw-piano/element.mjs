@@ -72,7 +72,7 @@ export class SwPiano extends HTMLElement {
     connectedCallback() {
         window.onkeyup = () => {}; // detect keyboard
         //todo: detect midi, mic, cam
-        if (!this.hasAttribute('instrument') && !this.hasAttribute('clef')) this.render('piano', 'treble');
+        if (!this.instrument && !this.clef) this.render('piano', 'treble');
     }
 
     render(instrument, clef) {
@@ -80,8 +80,12 @@ export class SwPiano extends HTMLElement {
         ul.replaceChildren();
         SwPiano.instruments[instrument][clef].forEach((key, index) => {
             const li = document.createElement('li');
-            const pitch = eval(`SwPiano.#${clef}`)[index];
-            li.onclick = () => this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, pitch, audio: SwPiano.#audioFromKey(pitch) }}));
+            li.onclick = () => {
+                const pitch = eval(`SwPiano.#${clef}`)[index];
+                const audio = SwPiano.#audioFromKey(pitch);
+                if (this.audible) audio.play();
+                this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, pitch, audio }}));
+            }
             const span = document.createElement('span');
 
             switch (instrument) {
@@ -125,8 +129,19 @@ export class SwPiano extends HTMLElement {
         this.setAttribute('clef', value);
     }
 
+    get audible() {
+        return this.hasAttribute('audible');
+    }
+
+    set audible(value) {
+        if (Boolean(value))
+          this.setAttribute('audible', '');
+        else
+          this.removeAttribute('audible');
+    }
+
     attributeChangedCallback(name, oldValue, newValue) {
-        if (newValue !== oldValue) this.render(this.getAttribute('instrument') || "piano", this.getAttribute('clef') || "treble");
+        if (newValue !== oldValue) this.render(this.instrument || "piano", this.clef || "treble");
     }
     
 }
