@@ -1,5 +1,5 @@
 import template from './template.mjs';
-import { MusicLibrary } from '/library/music.mjs';
+import { MusicLibrary } from "../sw-music/library.mjs";
 
 export class SwPiano extends HTMLElement {
     static #musicLibrary = new MusicLibrary(440);

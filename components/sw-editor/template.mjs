@@ -1,4 +1,4 @@
-import { ORIGIN } from "/library/music.mjs";
+import { ORIGIN } from "../sw-music/library.mjs";
 const template = document.createElement("template");
 
 template.innerHTML = `

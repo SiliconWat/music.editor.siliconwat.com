@@ -1,5 +1,5 @@
 import template from './template.mjs';
-import { MusicLibrary } from '/library/music.mjs';
+import { MusicLibrary } from "../sw-music/library.mjs";
 import * as noteProperties from './note.mjs';
 import * as playerProperties from "./player.mjs";
 
