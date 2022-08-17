@@ -14,7 +14,7 @@ export class SwEditor extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
         this.musicLibrary = new MusicLibrary(432);
-        this.staff = { pointer: null, clef: "treble", keySignature: "CM", timeSignature: [4, 4], tempo: 100 };
+        this.staff = { pointer: null, keySignature: "CM", timeSignature: [4, 4] };
         this.score = {
             treble: {
                 scale: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6'],
@@ -50,10 +50,10 @@ export class SwEditor extends HTMLElement {
         section.replaceChildren();
         
         const ol = document.createElement('ol');
-        ol.classList.add(this.staff.clef);
+        ol.classList.add(this.clef);
         section.append(ol);
 
-        this.score[this.staff.clef].notes.forEach((measure, m) => {
+        this.score[this.clef].notes.forEach((measure, m) => {
             const ol = document.createElement('ol');
             measure.forEach((note, n) => {
                 const li = document.createElement('li');
@@ -74,7 +74,7 @@ export class SwEditor extends HTMLElement {
             if (note.pitch === 'rest') div.classList.add('rest');
             else { 
                 div.classList.add('note', note.pitch);
-                if (note.duration !== 'whole') div.classList.add('stem', this.score[this.staff.clef].scale.indexOf(note.pitch) < 6 ? 'up' : 'down');
+                if (note.duration !== 'whole') div.classList.add('stem', this.score[this.clef].scale.indexOf(note.pitch) < 6 ? 'up' : 'down');
             }
 
             if (note.accidental) {
@@ -102,11 +102,19 @@ export class SwEditor extends HTMLElement {
     }
 
     get tempo() {
-        return this.getAttribute('tempo');
+        return parseInt(this.getAttribute('tempo'));
     }
 
     set tempo(value) {
         this.setAttribute('tempo', value);
+    }
+
+    get volume() {
+        return parseFloat(this.getAttribute('volume'));
+    }
+
+    set volume(value) {
+        this.setAttribute('volume', value);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

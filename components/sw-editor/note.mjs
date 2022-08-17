@@ -16,14 +16,14 @@ export function updateFromNav(nav) {
 }
 
 export function updateMeasure(action) {
-    const measure = this.staff.pointer ? this.staff.pointer[0] : this[this.staff.clef].score.length - 1;
+    const measure = this.staff.pointer ? this.staff.pointer[0] : this[this.clef].score.length - 1;
 
     switch (action) {
         case "Add":
-            this.score[this.staff.clef].notes.splice(measure + 1, 0, [{}, {}, {}, {}]);
+            this.score[this.clef].notes.splice(measure + 1, 0, [{}, {}, {}, {}]);
             break;
         case "Remove":
-            this.score[this.staff.clef].notes.splice(measure, 1);
+            this.score[this.clef].notes.splice(measure, 1);
             break;
     }
 
@@ -33,7 +33,7 @@ export function updateMeasure(action) {
 
 export function updateNote(duration) {
     if (this.staff.pointer) {
-        const note = this.score[this.staff.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
+        const note = this.score[this.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
         const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
         
         note.pitch = note.pitch || "C4";
@@ -46,7 +46,7 @@ export function updateNote(duration) {
 
 export function updateAccidental(accidental) {
     if (this.staff.pointer) {
-        const note = this.score[this.staff.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
+        const note = this.score[this.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
         const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
         
         note.pitch = note.pitch || "C4";
@@ -60,7 +60,7 @@ export function updateAccidental(accidental) {
 
 export function updateRest(duration) {
     if (this.staff.pointer) {
-        const note = this.score[this.staff.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
+        const note = this.score[this.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
         const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
         
         note.pitch = "rest";
@@ -73,13 +73,13 @@ export function updateRest(duration) {
 }
 
 export function updateFromPiano(piano) {
-    //piano.audio.play();
+    //piano.synth.play();
     if (this.staff.pointer) {
         const pitch = piano.pitch.substring(0, 2);
         const accidentals = {"♯": "sharp", "♭": "flat", "♮": "natural"};
         const accidental = accidentals[piano.pitch[2]] || null;
         
-        const note = this.score[this.staff.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
+        const note = this.score[this.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
         const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
         
         note.pitch = pitch;
@@ -96,7 +96,7 @@ export function updateFromPiano(piano) {
 
 //deprecated
 export function setPitch(pitch) {
-    const note = this.score[this.staff.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
+    const note = this.score[this.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
     const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
     
     if (li.firstElementChild) {
@@ -113,7 +113,7 @@ export function setPitch(pitch) {
 
 //deprecated
 export function setAccidental(accidental) {
-    const note = this.score[this.staff.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
+    const note = this.score[this.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]];
     note.accidental = accidental;
     const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
 

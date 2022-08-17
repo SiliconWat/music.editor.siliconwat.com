@@ -5,33 +5,19 @@ export class SwPiano extends HTMLElement {
     static #musicLibrary = new MusicLibrary(440);
     static #treble = ['C4', 'C4♯', 'D4', 'D4♯', 'E4', 'F4', 'F4♯', 'G4', 'G4♯', 'A4', 'A4♯', 'B4', 'C5', 'C5♯', 'D5', 'D5♯', 'E5', 'F5', 'F5♯', 'G5', 'G5♯', 'A5', 'A5♯', 'B5', 'C6'];
     static #bass = ['C2', 'D2♭', 'D2', 'E2♭', 'E2', 'F2', 'G2♭', 'G2', 'A2♭', 'A2', 'B2♭', 'B2', 'C3', 'D3♭', 'D3', 'E3♭', 'E3', 'F3', 'G3♭', 'G3', 'A3♭', 'A3', 'B3♭', 'B3', 'C4'];
-
-    static #frequencyFromKey(key) {
-        const accidental = key[2] || "";
-        const note = key[0] + accidental;
-        const octave = key[1];
-        return SwPiano.#musicLibrary.frequency(octave, note);
+    
+    static #pitch(key) {
+        const pitch = {};
+        pitch.octave = key[1];
+        pitch.noteClass = key[0];
+        pitch.accidental = key[2] || "";
+        pitch.note = pitch.noteClass + pitch.accidental;
+        return pitch;
     }
 
-    static #audioFromKey(key) { 
-        const accidental = key[2] || "";
-        const note = key[0] + accidental;
-        const octave = key[1]; 
-        return SwPiano.#musicLibrary.audio(octave, note);
-    }
-
-     static #solfegeFromKey(key) { 
-        const accidental = key[2] || "";
-        const note = key[0] + accidental;
-        const octave = key[1];
-        return SwPiano.#musicLibrary.solfege(octave, note);
-    }
-
-    static #aslFromKey(key) { 
-        const accidental = key[2] || "";
-        const note = key[0];
-        const octave = key[1]; 
-        return SwPiano.#musicLibrary.asl(octave, note);
+    static #clef = {
+        treble: SwPiano.#treble.map(key => SwPiano.#pitch(key)),
+        bass: SwPiano.#bass.map(key => SwPiano.#pitch(key)),
     }
 
     static get instruments() {
@@ -49,12 +35,12 @@ export class SwPiano extends HTMLElement {
                 bass: ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60']
             },
             voice: { 
-                treble: SwPiano.#treble.map(key => [SwPiano.#solfegeFromKey(key), Math.round(SwPiano.#frequencyFromKey(key))]),
-                bass: SwPiano.#bass.map(key => [SwPiano.#solfegeFromKey(key), Math.round(SwPiano.#frequencyFromKey(key))])
+                treble: SwPiano.#clef.treble.map(pitch => [SwPiano.#musicLibrary.solfege(pitch.octave, pitch.note), Math.round(SwPiano.#musicLibrary.frequency(pitch.octave, pitch.note))]),
+                bass: SwPiano.#clef.bass.map(pitch => [SwPiano.#musicLibrary.solfege(pitch.octave, pitch.note), Math.round(SwPiano.#musicLibrary.frequency(pitch.octave, pitch.note))])
             },
             ASL: {
-                treble: SwPiano.#treble.map(key => SwPiano.#aslFromKey(key)),
-                bass: SwPiano.#bass.map(key => SwPiano.#aslFromKey(key))
+                treble: SwPiano.#clef.treble.map(pitch => SwPiano.#musicLibrary.asl(pitch.octave, pitch.noteClass)),
+                bass: SwPiano.#clef.bass.map(pitch => SwPiano.#musicLibrary.asl(pitch.octave, pitch.noteClass))
             }
         };
     }
@@ -82,12 +68,14 @@ export class SwPiano extends HTMLElement {
             const li = document.createElement('li');
             li.onclick = () => {
                 const pitch = eval(`SwPiano.#${clef}`)[index];
-                const audio = SwPiano.#audioFromKey(pitch);
-                if (this.audible) audio.play();
-                this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, pitch, audio }}));
-            }
-            const span = document.createElement('span');
+                const { octave, note } = SwPiano.#pitch(pitch);
+                const audio = SwPiano.#musicLibrary.audio(octave, note);
+                const synth = SwPiano.#musicLibrary.synth(octave, note);
+                if (this.audible) this.synth ? synth.play() : audio.play();
+                this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, pitch, audio, synth }}));
+            };
 
+            const span = document.createElement('span');
             switch (instrument) {
                 case "piano":
                     span.textContent = key; // innerHTML required for html entities
@@ -138,6 +126,17 @@ export class SwPiano extends HTMLElement {
           this.setAttribute('audible', '');
         else
           this.removeAttribute('audible');
+    }
+
+    get synth() {
+        return this.hasAttribute('synth');
+    }
+
+    set synth(value) {
+        if (Boolean(value))
+          this.setAttribute('synth', '');
+        else
+          this.removeAttribute('synth');
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
