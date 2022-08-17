@@ -69,8 +69,8 @@ export class SwPiano extends HTMLElement {
             li.onclick = () => {
                 const pitch = eval(`SwPiano.#${clef}`)[index];
                 const { octave, note } = SwPiano.#pitch(pitch);
-                const audio = SwPiano.#musicLibrary.audio(octave, note);
-                const synth = SwPiano.#musicLibrary.synth(octave, note);
+                const audio = SwPiano.#musicLibrary.audio(octave, note, this.volume);
+                const synth = SwPiano.#musicLibrary.synth(octave, note, this.volume, this.synth);
                 if (this.audible) this.synth ? synth.play() : audio.play();
                 this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, pitch, audio, synth }}));
             };
@@ -117,6 +117,22 @@ export class SwPiano extends HTMLElement {
         this.setAttribute('clef', value);
     }
 
+    get synth() {
+        return this.getAttribute('synth');
+    }
+
+    set synth(value) {
+        this.setAttribute('synth', value);
+    }
+
+    get volume() {
+        return parseFloat(this.getAttribute('volume'));
+    }
+
+    set volume(value) {
+        this.setAttribute('volume', value);
+    }
+
     get audible() {
         return this.hasAttribute('audible');
     }
@@ -126,17 +142,6 @@ export class SwPiano extends HTMLElement {
           this.setAttribute('audible', '');
         else
           this.removeAttribute('audible');
-    }
-
-    get synth() {
-        return this.hasAttribute('synth');
-    }
-
-    set synth(value) {
-        if (Boolean(value))
-          this.setAttribute('synth', '');
-        else
-          this.removeAttribute('synth');
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

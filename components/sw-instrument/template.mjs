@@ -7,7 +7,8 @@ template.innerHTML = `
         <li id="piano">🎹</li>
         <li id="keyboard">⌨️</li>
         <li id="midi">⎋</li>
-        <li id="voice">🎤</li>
+        <li id="voice">🎙</li>
+        <li id="speech">🎤</li>
         <li id="ASL">📷</li>
     </ul>
 `;
