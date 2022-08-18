@@ -12,6 +12,8 @@ export class SwPiano extends HTMLElement {
         pitch.noteClass = key[0];
         pitch.accidental = key[2] || "";
         pitch.note = pitch.noteClass + pitch.accidental;
+        pitch.audio = SwPiano.#musicLibrary.audio(pitch.octave, pitch.note, this.volume);
+        pitch.synth = SwPiano.#musicLibrary.synth(pitch.octave, pitch.note, this.volume, this.synth);
         return pitch;
     }
 
@@ -56,9 +58,38 @@ export class SwPiano extends HTMLElement {
     }
 
     connectedCallback() {
-        window.onkeyup = () => {}; // detect keyboard
-        //todo: detect midi, mic, cam
+        window.onkeyup = this.keyboard.bind(this);
         if (!this.instrument && !this.clef) this.render('piano', 'treble');
+    }
+
+    keyboard(event) {
+        const key = String.fromCharCode(event.keyCode).toLocaleLowerCase();
+        const index = SwPiano.instruments.keyboard[this.clef].indexOf(key);
+        if (index !== -1) this.dispatch("keyboard", this.clef, key, index);
+    }
+
+    speech() {
+
+    }
+
+    midi() {
+
+    }
+
+    mic() {
+
+    }
+
+    cam() {
+
+    }
+
+    dispatch(instrument, clef, key, index) {
+        console.log('hi')
+        const pitch = eval(`SwPiano.#${clef}`)[index];
+        const { audio, synth } = SwPiano.#pitch(pitch);
+        if (this.audible) this.synth ? synth.play() : audio.play();
+        this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, pitch, audio, synth }}));
     }
 
     render(instrument, clef) {
@@ -66,16 +97,9 @@ export class SwPiano extends HTMLElement {
         ul.replaceChildren();
         SwPiano.instruments[instrument][clef].forEach((key, index) => {
             const li = document.createElement('li');
-            li.onclick = () => {
-                const pitch = eval(`SwPiano.#${clef}`)[index];
-                const { octave, note } = SwPiano.#pitch(pitch);
-                const audio = SwPiano.#musicLibrary.audio(octave, note, this.volume);
-                const synth = SwPiano.#musicLibrary.synth(octave, note, this.volume, this.synth);
-                if (this.audible) this.synth ? synth.play() : audio.play();
-                this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, pitch, audio, synth }}));
-            };
-
+            li.onclick = () => this.dispatch(instrument, clef, key, index);
             const span = document.createElement('span');
+
             switch (instrument) {
                 case "piano":
                     span.textContent = key; // innerHTML required for html entities
