@@ -8,6 +8,6 @@ export class SwInstrument extends HTMLElement {
     }
 
     connectedCallback() {
-        ['piano', 'keyboard', 'midi', 'voice', 'ASL'].forEach(instrument => this.shadowRoot.getElementById(instrument).onclick = () => this.dispatchEvent(new CustomEvent("sw-instrument", { bubbles: true, composed: true, detail: { instrument }})));
+        ['piano', 'keyboard', 'midi', 'voice', 'speech', 'ASL'].forEach(instrument => this.shadowRoot.getElementById(instrument).onclick = () => this.dispatchEvent(new CustomEvent("sw-instrument", { bubbles: true, composed: true, detail: { instrument }})));
     }
 }

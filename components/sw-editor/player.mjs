@@ -2,7 +2,7 @@ export async function updateFromPlayer(player) {
     if (player.tempo) this.updateTempo(player.tempo)
     else switch (player.action) {
         case "play":
-            this.play();
+            this.speak("i'm tawn");
             break;
         case "pause":
             this.pause();
@@ -123,3 +123,13 @@ function sound(note) {
 
 //     ///
 //   }
+
+export function speak(text, rate=1, pitch=1, voice=11) {
+    const synth = window.speechSynthesis;
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.rate = rate;
+    speech.pitch = pitch;
+    speech.voice = synth.getVoices()[voice];
+    console.log(speech.voice)
+    synth.speak(speech);
+}

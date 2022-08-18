@@ -1,5 +1,7 @@
 import template from './template.mjs';
 import { MusicLibrary } from "../sw-music/library.mjs";
+import * as keyboardProperties from "./keyboard.mjs";
+import * as speechProperties from "./speech.mjs";
 
 export class SwPiano extends HTMLElement {
     static #musicLibrary = new MusicLibrary(440);
@@ -22,45 +24,35 @@ export class SwPiano extends HTMLElement {
         bass: SwPiano.#bass.map(key => SwPiano.#pitch(key)),
     }
 
-    static get instruments() {
-        return {
-            piano: {
-                treble: SwPiano.#treble,
-                bass: SwPiano.#bass
-            },
-            keyboard: {
-                treble: ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', 'q<br>,', '2<br>l', 'w<br>.', '3<br>;', 'e<br>/', 'r', '5', 't', '6', 'y', '7', 'u', 'i'],
-                bass: ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', 'q<br>,', '2<br>l', 'w<br>.', '3<br>;', 'e<br>/', 'r', '5', 't', '6', 'y', '7', 'u', 'i'],
-                keyCodes: {
-                    81: [12, "q"],
-                    188: [12, ","],
-                    50: [13, 2],
-                    76: [13, "l"],
-                    87: [14, "w"],
-                    190: [14, "."],
-                    51: [15, 3],
-                    186: [15, ";"],
-                    69: [16, "e"],
-                    191: [16, "/"]
-                }
-            },
-            midi: {
-                treble: ['60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84'],
-                bass: ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60']
-            },
-            voice: { 
-                treble: SwPiano.#clef.treble.map(pitch => [SwPiano.#musicLibrary.solfege(pitch.octave, pitch.note), Math.round(SwPiano.#musicLibrary.frequency(pitch.octave, pitch.note))]),
-                bass: SwPiano.#clef.bass.map(pitch => [SwPiano.#musicLibrary.solfege(pitch.octave, pitch.note), Math.round(SwPiano.#musicLibrary.frequency(pitch.octave, pitch.note))])
-            },
-            ASL: {
-                treble: SwPiano.#clef.treble.map(pitch => SwPiano.#musicLibrary.asl(pitch.octave, pitch.noteClass)),
-                bass: SwPiano.#clef.bass.map(pitch => SwPiano.#musicLibrary.asl(pitch.octave, pitch.noteClass))
-            }
-        };
-    }
-
     static get observedAttributes() {
         return ['instrument', 'clef'];
+    }
+
+    instruments = {
+        piano: {
+            treble: SwPiano.#treble,
+            bass: SwPiano.#bass
+        },
+        speech: {
+            treble: SwPiano.#treble,
+            bass: SwPiano.#bass
+        },
+        keyboard: {
+            treble: ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', 'q<br>,', '2<br>l', 'w<br>.', '3<br>;', 'e<br>/', 'r', '5', 't', '6', 'y', '7', 'u', 'i'],
+            bass: ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', 'q<br>,', '2<br>l', 'w<br>.', '3<br>;', 'e<br>/', 'r', '5', 't', '6', 'y', '7', 'u', 'i']
+        },
+        midi: {
+            treble: ['60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84'],
+            bass: ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60']
+        },
+        voice: { 
+            treble: SwPiano.#clef.treble.map(pitch => [SwPiano.#musicLibrary.solfege(pitch.octave, pitch.note), Math.round(SwPiano.#musicLibrary.frequency(pitch.octave, pitch.note))]),
+            bass: SwPiano.#clef.bass.map(pitch => [SwPiano.#musicLibrary.solfege(pitch.octave, pitch.note), Math.round(SwPiano.#musicLibrary.frequency(pitch.octave, pitch.note))])
+        },
+        ASL: {
+            treble: SwPiano.#clef.treble.map(pitch => SwPiano.#musicLibrary.asl(pitch.octave, pitch.noteClass)),
+            bass: SwPiano.#clef.bass.map(pitch => SwPiano.#musicLibrary.asl(pitch.octave, pitch.noteClass))
+        }
     }
 
     constructor() {
@@ -70,48 +62,15 @@ export class SwPiano extends HTMLElement {
     }
 
     connectedCallback() {
-        window.onkeyup = this.keyboard.bind(this);
         if (!this.instrument && !this.clef) this.render('piano', 'treble');
-    }
-
-    keyboard(event) {
-        let index, key;
-        if (SwPiano.instruments.keyboard.keyCodes[event.keyCode]) {
-            [ index, key ] = SwPiano.instruments.keyboard.keyCodes[event.keyCode];
-        } else {
-            key = String.fromCharCode(event.keyCode).toLowerCase();
-            index = SwPiano.instruments.keyboard[this.clef].indexOf(key);
-        }
-        if (index !== -1) this.dispatch("keyboard", this.clef, key, index);
-    }
-
-    speech() {
-
-    }
-
-    midi() {
-
-    }
-
-    mic() {
-
-    }
-
-    cam() {
-
-    }
-
-    dispatch(instrument, clef, key, index) {
-        const pitch = eval(`SwPiano.#${clef}`)[index];
-        const { audio, synth } = SwPiano.#pitch(pitch);
-        if (this.audible) this.synth ? synth.play() : audio.play();
-        this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, pitch, audio, synth }}));
+        window.onkeyup = this.keyboard.bind(this);
+        this.recognition = this.initSpeech();
     }
 
     render(instrument, clef) {
         const ul = this.shadowRoot.querySelector('ul');
         ul.replaceChildren();
-        SwPiano.instruments[instrument][clef].forEach((key, index) => {
+        this.instruments[instrument][clef].forEach((key, index) => {
             const li = document.createElement('li');
             li.onclick = () => this.dispatch(instrument, clef, key, index);
             const span = document.createElement('span');
@@ -139,6 +98,13 @@ export class SwPiano extends HTMLElement {
             li.append(span);
             ul.append(li);
         });
+    }
+
+    dispatch(instrument, clef, key, index) {
+        const pitch = eval(`SwPiano.#${clef}`)[index];
+        const { audio, synth } = SwPiano.#pitch(pitch);
+        if (this.audible) this.synth ? synth.play() : audio.play();
+        this.dispatchEvent(new CustomEvent("sw-piano", { bubbles: true, composed: true, detail: { instrument, clef, key, pitch, audio, synth }}));
     }
 
     get instrument() {
@@ -185,7 +151,12 @@ export class SwPiano extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        if (newValue !== oldValue) this.render(this.instrument || "piano", this.clef || "treble");
+        if (name === 'instrument' && ['speech'].includes(this.instrument)) this[this.instrument]();
+        if (newValue !== oldValue) {
+            this.render(this.instrument || "piano", this.clef || "treble");
+        }
     }
     
 }
+
+Object.assign(SwPiano.prototype, keyboardProperties, speechProperties);
