@@ -29,8 +29,20 @@ export class SwPiano extends HTMLElement {
                 bass: SwPiano.#bass
             },
             keyboard: {
-                treble: ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', 'q<br>,', '2<br>l', '2<br>.', '3<br>;', '3<br>/', 'r', '5', 't', '6', 'y', '7', 'u', 'i'],
+                treble: ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', 'q<br>,', '2<br>l', 'w<br>.', '3<br>;', 'e<br>/', 'r', '5', 't', '6', 'y', '7', 'u', 'i'],
                 bass: ['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm', 'q<br>,', '2<br>l', 'w<br>.', '3<br>;', 'e<br>/', 'r', '5', 't', '6', 'y', '7', 'u', 'i'],
+                keyCodes: {
+                    81: [12, "q"],
+                    188: [12, ","],
+                    50: [13, 2],
+                    76: [13, "l"],
+                    87: [14, "w"],
+                    190: [14, "."],
+                    51: [15, 3],
+                    186: [15, ";"],
+                    69: [16, "e"],
+                    191: [16, "/"]
+                }
             },
             midi: {
                 treble: ['60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84'],
@@ -63,8 +75,13 @@ export class SwPiano extends HTMLElement {
     }
 
     keyboard(event) {
-        const key = String.fromCharCode(event.keyCode).toLocaleLowerCase();
-        const index = SwPiano.instruments.keyboard[this.clef].indexOf(key);
+        let index, key;
+        if (SwPiano.instruments.keyboard.keyCodes[event.keyCode]) {
+            [ index, key ] = SwPiano.instruments.keyboard.keyCodes[event.keyCode];
+        } else {
+            key = String.fromCharCode(event.keyCode).toLowerCase();
+            index = SwPiano.instruments.keyboard[this.clef].indexOf(key);
+        }
         if (index !== -1) this.dispatch("keyboard", this.clef, key, index);
     }
 
@@ -85,7 +102,6 @@ export class SwPiano extends HTMLElement {
     }
 
     dispatch(instrument, clef, key, index) {
-        console.log('hi')
         const pitch = eval(`SwPiano.#${clef}`)[index];
         const { audio, synth } = SwPiano.#pitch(pitch);
         if (this.audible) this.synth ? synth.play() : audio.play();
