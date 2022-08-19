@@ -55,16 +55,36 @@ export function clear() {
 }
 
 export function play() {
-    let counter = 0;
-    this.score[this.clef].notes.forEach((measure, m) => {
-        measure.forEach((note, n) => {
-            if (note.pitch) {
-                const beat = this.tempo/60;
-                const player = this.musicLibrary.player(this.volume);
-                player.play(this.getPitch(note), this.getDuration(note), beat*counter++);
-            }
+    if (this.staff.audio) {
+        this.staff.audio.resume();
+    } else {
+        const player = this.musicLibrary.player(this.volume);
+        this.staff.audio = player.context;
+        let time = 0;
+
+        this.score[this.clef].notes.forEach((measure, m) => {
+            measure.forEach((note, n) => {
+                if (note.pitch) {
+                    const duration = this.getDuration(note);
+                    //todo: pointer follows note being played...
+                    setTimeout(() => player.play2(this.getPitch(note), duration), time*1000);
+                    //player.play(this.getPitch(note), duration, time);
+                    time += duration;
+                }
+            });
         });
-    });    
+    }
+}
+
+export function pause() {
+    if (this.staff.audio) this.staff.audio.suspend();
+}
+
+export function stop() {
+    if (this.staff.audio) {
+        this.staff.audio.close();
+        this.staff.audio = null;
+    }
 }
 
 export function getPitch(note) {
@@ -82,51 +102,7 @@ export function getDuration(note) {
     const beat = this.tempo/60;
     const durations = { whole: beat*4, half: beat*2, quarter: beat };
     return durations[note.duration];
-    
-}  
-
-// function playNote(note, length) {
-//     const AudioContext = window.AudioContext || window.webkitAudioContext,
-//     ctx = new AudioContext(),
-//     oscillator = ctx.createOscillator(),
-//     gainNode = ctx.createGain();
-//     oscillator.type = 'triangle';
-//     oscillator.frequency.value = note;
-//     gainNode.gain.value = volume;
-//     oscillator.connect(gainNode);   
-//     gainNode.connect(ctx.destination);
-//     oscillator.start(0);
-//     //Trying to prevent popping sound on note end. Probably can be improved
-//     gainNode.gain.setTargetAtTime(0, length/1000-0.05, 0.08);
-//     oscillator.stop(ctx.currentTime + (length/1000+0.2));
-//     oscillator.onended = () => ctx.close();
-
-
-//     ///
-//     var context = new AudioContext();
-
-//     var notes = [1175, 2794];
-//     var duration = 1;
-//     var interval = 2;
-  
-//     function play(frequency, time) {
-//       var o = context.createOscillator();
-//       var g = context.createGain();
-//       o.connect(g);
-//       g.connect(context.destination);
-//       g.gain.exponentialRampToValueAtTime(
-//         0.00001, context.currentTime + duration + time
-//       );
-//       o.frequency.value = frequency;
-//       o.start(time);
-//     }
-  
-//     for (var i = 0; i < notes.length; i++) {
-//       play(notes[i], i * interval);
-//     }
-
-//     ///
-//   }
+}
 
 export function speak(text, rate=1, pitch=1, voice=11) {
     const synth = window.speechSynthesis;

@@ -35,7 +35,11 @@ export class MusicLibrary {
         "G♯": "G♯|A♭",
         "A♭": "G♯|A♭",
         "A♯": "A♯|B♭",
-        "B♭": "A♯|B♭"
+        "B♭": "A♯|B♭",
+        "B♯": "C",
+        "C♭": "B",
+        "E♯": "F",
+        "F♭": "E",
     }
     #solfege = {
         C: "Do",
@@ -78,7 +82,7 @@ export class MusicLibrary {
         return `${ORIGIN}/components/sw-music/ASL/notes/${note.toLowerCase()}.svg`;
     }
 
-    audio(octave, note, volume=10) {
+    audio(octave, note, volume=5) {
         const audio = new Audio(`${ORIGIN}/components/sw-music/keys/${octave}/${this.#enharmonicNotes[note] || note}.mp3`);
         audio.preload = "auto";
         audio.loop = false;
@@ -107,7 +111,7 @@ export class MusicLibrary {
         
         return {
             play() {
-                oscillator.start(0)
+                oscillator.start(context.currentTime)
                 oscillator.stop(context.currentTime + 1)
             },
             start() {
@@ -119,21 +123,29 @@ export class MusicLibrary {
         }
     }
 
-    player(volume=10) {
+    player(volume=5) {
         const context = new AudioContext()
         const envelope = context.createGain()
         envelope.gain.value = volume
-        //envelope.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.5)
-        
-        const oscillator = context.createOscillator()
-        oscillator.type = 'triangle'
-        oscillator.connect(envelope).connect(context.destination)
-        
+
         return {
+            context,
             play (pitch, duration, time) {
+                const oscillator = context.createOscillator()
+                oscillator.type = 'triangle'
+                oscillator.connect(envelope).connect(context.destination)
                 oscillator.frequency.value = pitch
                 oscillator.start(time)
-                oscillator.stop(context.currentTime + time + duration)
+                oscillator.stop(time + duration)
+                return context;
+            },
+            play2 (pitch, duration) {
+                const oscillator = context.createOscillator()
+                oscillator.type = 'triangle'
+                oscillator.connect(envelope).connect(context.destination)
+                oscillator.frequency.value = pitch
+                oscillator.start(context.currentTime)
+                envelope.gain.exponentialRampToValueAtTime(0.001, context.currentTime + duration)
             } 
         }
     }
