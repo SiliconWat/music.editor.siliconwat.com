@@ -2,7 +2,7 @@ export async function updateFromPlayer(player) {
     if (player.tempo) this.updateTempo(player.tempo)
     else switch (player.action) {
         case "play":
-            this.speak("i'm tawn");
+            this.play();
             break;
         case "pause":
             this.pause();
@@ -54,32 +54,36 @@ export function clear() {
     }
 }
 
-function sound(note) {
-    const frequency = this.musicLibrary.frequency(octave, note);
+export function play() {
+    let counter = 0;
+    this.score[this.clef].notes.forEach((measure, m) => {
+        measure.forEach((note, n) => {
+            if (note.pitch) {
+                const beat = this.tempo/60;
+                const player = this.musicLibrary.player(this.volume);
+                player.play(this.getPitch(note), this.getDuration(note), beat*counter++);
+            }
+        });
+    });    
 }
 
-// function playFrequency(frequency) {
-//     var context = new AudioContext();
-//     var o = context.createOscillator();
-//     o.frequency.setTargetAtTime(440, context.currentTime, 0);
-//     o.connect(context.destination);
-//     o.start(0);
-//     ////
-//     const context = new AudioContext()
-//     const envelope = context.createGain()
-//     envelope.gain.value = 5
+export function getPitch(note) {
+    if (note.pitch === 'rest') {
+        return 0;
+    } else {
+        const accidentals = { sharp: "♯", flat: "♭" };
+        const octave = note.pitch[1];
+        const accidental = accidentals[note.accidental] || "";
+        return this.musicLibrary.frequency(octave, note.pitch[0] + accidental);
+    }
+}
+
+export function getDuration(note) {
+    const beat = this.tempo/60;
+    const durations = { whole: beat*4, half: beat*2, quarter: beat };
+    return durations[note.duration];
     
-//     const oscillator = context.createOscillator()
-//     oscillator.frequency.value = frequency
-//     oscillator.type = 'sine'
-    
-//     oscillator.connect(envelope)
-//     envelope.connect(context.destination)
-    
-//     oscillator.start()
-//     envelope.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.5)
-//     oscillator.stop(context.currentTime + 1)
-// }
+}  
 
 // function playNote(note, length) {
 //     const AudioContext = window.AudioContext || window.webkitAudioContext,

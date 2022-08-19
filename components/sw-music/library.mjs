@@ -102,8 +102,7 @@ export class MusicLibrary {
         const oscillator = context.createOscillator()
         oscillator.type = type
         if (sustain) oscillator.frequency.linearRampToValueAtTime(this.frequency(octave, note), context.currentTime)
-        else oscillator.frequency.value = this.frequency(octave, note)
-        //oscillator.frequency.setTargetAtTime(this.frequency(octave, note), context.currentTime, 0.5);
+        else oscillator.frequency.setTargetAtTime(this.frequency(octave, note), context.currentTime, 0.5)
         oscillator.connect(envelope).connect(context.destination)
         
         return {
@@ -116,6 +115,25 @@ export class MusicLibrary {
             },
             stop() {
                 oscillator.stop()
+            }
+        }
+    }
+
+    player(volume=10) {
+        const context = new AudioContext()
+        const envelope = context.createGain()
+        envelope.gain.value = volume
+        //envelope.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.5)
+        
+        const oscillator = context.createOscillator()
+        oscillator.type = 'triangle'
+        oscillator.connect(envelope).connect(context.destination)
+        
+        return {
+            play (pitch, duration, time) {
+                oscillator.frequency.value = pitch
+                oscillator.start(time)
+                oscillator.stop(context.currentTime + time + duration)
             }
         }
     }

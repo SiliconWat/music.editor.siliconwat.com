@@ -21,7 +21,7 @@ export class SwEditor extends HTMLElement {
                 notes: [
                     [{pitch: 'C5', duration: 'whole', accidental: null}, 
                         {pitch: 'C5', duration: 'half', accidental: 'natural'},
-                        {pitch: 'C4', duration: 'quarter', accidental: 'flat'},
+                        {pitch: 'C4', duration: 'quarter', accidental: 'sharp'},
                         {pitch: 'C6', duration: 'half', accidental: 'sharp'}],
                     [{pitch: 'rest', duration: 'whole'},
                         {pitch: 'rest', duration: 'half'},
