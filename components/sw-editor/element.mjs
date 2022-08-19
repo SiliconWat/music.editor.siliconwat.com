@@ -3,7 +3,7 @@ import { MusicLibrary } from "../sw-music/library.mjs";
 import * as noteProperties from './note.mjs';
 import * as playerProperties from "./player.mjs";
 
-export class SwEditor extends HTMLElement {
+class SwEditor extends HTMLElement {
     static get observedAttributes() {
         return ['clef'];
     }
@@ -128,3 +128,4 @@ export class SwEditor extends HTMLElement {
 
 //SwEditor.prototype.updateFromPlayer = updateFromPlayer;
 Object.assign(SwEditor.prototype, noteProperties, playerProperties);
+customElements.define("sw-editor", SwEditor);

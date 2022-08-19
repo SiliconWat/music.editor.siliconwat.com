@@ -3,7 +3,7 @@ import { MusicLibrary } from "../sw-music/library.mjs";
 import * as keyboardProperties from "./keyboard.mjs";
 import * as speechProperties from "./speech.mjs";
 
-export class SwPiano extends HTMLElement {
+class SwPiano extends HTMLElement {
     static #musicLibrary = new MusicLibrary(440);
     static #treble = ['C4', 'C4♯', 'D4', 'D4♯', 'E4', 'F4', 'F4♯', 'G4', 'G4♯', 'A4', 'A4♯', 'B4', 'C5', 'C5♯', 'D5', 'D5♯', 'E5', 'F5', 'F5♯', 'G5', 'G5♯', 'A5', 'A5♯', 'B5', 'C6'];
     static #bass = ['C2', 'D2♭', 'D2', 'E2♭', 'E2', 'F2', 'G2♭', 'G2', 'A2♭', 'A2', 'B2♭', 'B2', 'C3', 'D3♭', 'D3', 'E3♭', 'E3', 'F3', 'G3♭', 'G3', 'A3♭', 'A3', 'B3♭', 'B3', 'C4'];
@@ -160,3 +160,4 @@ export class SwPiano extends HTMLElement {
 }
 
 Object.assign(SwPiano.prototype, keyboardProperties, speechProperties);
+customElements.define("sw-piano", SwPiano);

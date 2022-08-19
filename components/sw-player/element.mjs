@@ -1,6 +1,6 @@
 import template from './template.mjs';
 
-export class SwPlayer extends HTMLElement {
+class SwPlayer extends HTMLElement {
     #min = 10;
     #max = 300;
 
@@ -31,3 +31,5 @@ export class SwPlayer extends HTMLElement {
         };
     }
 }
+
+customElements.define("sw-player", SwPlayer);

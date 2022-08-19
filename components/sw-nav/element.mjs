@@ -1,6 +1,6 @@
 import template from './template.mjs';
 
-export class SwNav extends HTMLElement {
+class SwNav extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
@@ -37,3 +37,5 @@ export class SwNav extends HTMLElement {
         }
     }
 }
+
+customElements.define("sw-nav", SwNav);

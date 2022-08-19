@@ -134,7 +134,7 @@ export class MusicLibrary {
                 oscillator.frequency.value = pitch
                 oscillator.start(time)
                 oscillator.stop(context.currentTime + time + duration)
-            }
+            } 
         }
     }
 }
