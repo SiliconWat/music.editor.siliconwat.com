@@ -1,11 +1,12 @@
 import template from './template.mjs';
+import { state } from '/components/sw-music/state.mjs';
 import { MusicLibrary } from "../sw-music/library.mjs";
 import * as noteProperties from './note.mjs';
 import * as playerProperties from "./player.mjs";
 
 class SwEditor extends HTMLElement {
     static get observedAttributes() {
-        return ['clef'];
+        return ['clef', 'tempo'];
     }
     
     constructor() {
@@ -14,21 +15,12 @@ class SwEditor extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
         this.musicLibrary = new MusicLibrary(432);
-        this.staff = { pointer: null, keySignature: "CM", timeSignature: [4, 4], audio: null };
+        this.player = null;
+        this.staff = { pointer: null, keySignature: "CM", timeSignature: [4, 4] };
         this.score = {
             treble: {
                 scale: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6'],
-                notes: [
-                    [{pitch: 'C5', duration: 'whole', accidental: null}, 
-                        {pitch: 'C5', duration: 'half', accidental: 'natural'},
-                        {pitch: 'C4', duration: 'quarter', accidental: 'flat'},
-                        {pitch: 'C6', duration: 'half', accidental: 'sharp'}],
-                    [{pitch: 'rest', duration: 'whole'},
-                        {pitch: 'rest', duration: 'half'},
-                        {pitch: 'rest', duration: 'quarter'},
-                        {}],
-                        [{}, {}, {}, {}]
-                ]
+                notes: []
             },
             bass: {
                 scale: ['C2', 'D2', 'E2', 'F2', 'G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4'],
@@ -119,8 +111,13 @@ class SwEditor extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (newValue !== oldValue) {
-            this.staff[name] = newValue;
-            this.render();
+            if (name === 'tempo') {
+                state.tempo = parseInt(newValue);
+                console.log(state.tempo);
+            } else {
+                this.staff[name] = newValue;
+                this.render();
+            }
         }
     }
     
@@ -129,3 +126,16 @@ class SwEditor extends HTMLElement {
 //SwEditor.prototype.updateFromPlayer = updateFromPlayer;
 Object.assign(SwEditor.prototype, noteProperties, playerProperties);
 customElements.define("sw-editor", SwEditor);
+
+// DATA MODEL
+// notes: [
+//     [{pitch: 'C5', duration: 'whole', accidental: null}, 
+//         {pitch: 'C5', duration: 'half', accidental: 'natural'},
+//         {pitch: 'C4', duration: 'quarter', accidental: 'flat'},
+//         {pitch: 'C6', duration: 'half', accidental: 'sharp'}],
+//     [{pitch: 'rest', duration: 'whole'},
+//         {pitch: 'rest', duration: 'half'},
+//         {pitch: 'rest', duration: 'quarter'},
+//         {}],
+//         [{}, {}, {}, {}]
+// ]

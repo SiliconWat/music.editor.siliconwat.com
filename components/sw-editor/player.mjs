@@ -1,6 +1,5 @@
-export async function updateFromPlayer(player) {
-    if (player.tempo) this.updateTempo(player.tempo)
-    else switch (player.action) {
+export async function updateFromPlayer(action) {
+    switch (action) {
         case "play":
             this.play();
             break;
@@ -55,20 +54,18 @@ export function clear() {
 }
 
 export function play() {
-    if (this.staff.audio) {
-        this.staff.audio.resume();
+    if (this.player) {
+        this.player.context.resume();
     } else {
-        const player = this.musicLibrary.player(this.volume);
-        this.staff.audio = player.context;
         let time = 0;
-
+        this.player = this.musicLibrary.player(this.volume);
         this.score[this.clef].notes.forEach((measure, m) => {
             measure.forEach((note, n) => {
                 if (note.pitch) {
                     const duration = this.getDuration(note);
                     //todo: pointer follows note being played...
-                    setTimeout(() => player.play2(this.getPitch(note), duration), time*1000);
-                    //player.play(this.getPitch(note), duration, time);
+                    setTimeout(() => this.player.play2(this.getPitch(note), duration), time*1000);
+                    //this.player.play(this.getPitch(note), duration, time);
                     time += duration;
                 }
             });
@@ -77,13 +74,13 @@ export function play() {
 }
 
 export function pause() {
-    if (this.staff.audio) this.staff.audio.suspend();
+    if (this.player) this.player.context.suspend();
 }
 
 export function stop() {
-    if (this.staff.audio) {
-        this.staff.audio.close();
-        this.staff.audio = null;
+    if (this.player) {
+        this.player.context.close();
+        this.player = null;
     }
 }
 
