@@ -10,7 +10,7 @@ template.innerHTML = `
         <li id="copy">📑</li>
         <li id="paste">📋</li>
         <li id="delete">Ｘ</li>
-        <li id="new">🆕</li>
+        <li id="clear">🆑</li>
     </ul>
 `;
 

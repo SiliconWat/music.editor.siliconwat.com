@@ -17,7 +17,7 @@ class SwPlayer extends HTMLElement {
     }
 
     connectedCallback() {
-        ['play', 'pause', 'stop', 'copy', 'paste', 'delete', 'new'].forEach(action => this.shadowRoot.getElementById(action).onclick = () => this.dispatchEvent(new CustomEvent("sw-player", { bubbles: true, composed: true, detail: { action }})));
+        ['play', 'pause', 'stop', 'copy', 'paste', 'delete', 'clear'].forEach(action => this.shadowRoot.getElementById(action).onclick = () => this.dispatchEvent(new CustomEvent("sw-player", { bubbles: true, composed: true, detail: { action }})));
         
         this.input.onkeyup = () => state.tempo = this.input.value;
         this.input.onchange = () => { 

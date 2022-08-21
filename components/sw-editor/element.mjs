@@ -8,6 +8,18 @@ class SwEditor extends HTMLElement {
     static get observedAttributes() {
         return ['clef', 'tempo'];
     }
+
+    staff = JSON.parse(localStorage.getItem('staff')) || { pointer: null, keySignature: "CM", timeSignature: [4, 4] };
+    score = JSON.parse(localStorage.getItem('score')) || {
+        treble: {
+            scale: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6'],
+            notes: []
+        },
+        bass: {
+            scale: ['C2', 'D2', 'E2', 'F2', 'G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4'],
+            notes: []
+        }
+    };
     
     constructor() {
         super();
@@ -15,18 +27,7 @@ class SwEditor extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
         this.musicLibrary = new MusicLibrary(432);
-        this.player = null;
-        this.staff = { pointer: null, keySignature: "CM", timeSignature: [4, 4] };
-        this.score = {
-            treble: {
-                scale: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6'],
-                notes: []
-            },
-            bass: {
-                scale: ['C2', 'D2', 'E2', 'F2', 'G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4'],
-                notes: []
-            }
-        }
+        this.player = null;        
     }
 
     connectedCallback() {
@@ -38,6 +39,7 @@ class SwEditor extends HTMLElement {
     }
 
     render() {
+        localStorage.setItem('score', JSON.stringify(this.score));
         const section = this.shadowRoot.querySelector('section');
         section.replaceChildren();
         
@@ -49,6 +51,7 @@ class SwEditor extends HTMLElement {
             const ol = document.createElement('ol');
             measure.forEach((note, n) => {
                 const li = document.createElement('li');
+                if (this.staff.pointer && this.staff.pointer[0] === m && this.staff.pointer[1] === n) li.classList.add('pointer');
                 li.id = `sw-${m}-${n}`;
                 li.onclick = () => this.setPointer(m, n);
                 ol.append(li);
@@ -59,6 +62,7 @@ class SwEditor extends HTMLElement {
     }
 
     renderNote(li, note) {
+        li.replaceChildren();
         if (note.pitch) {
             const div = document.createElement('div');
             div.classList.add(note.duration)
@@ -77,12 +81,14 @@ class SwEditor extends HTMLElement {
 
             li.append(div);
         }
+        localStorage.setItem('score', JSON.stringify(this.score));
     }
 
     setPointer(measure, note) {
         if (this.staff.pointer) this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`).classList.remove('pointer');
         this.shadowRoot.getElementById(`sw-${measure}-${note}`).classList.add('pointer');
         this.staff.pointer = [measure, note];
+        localStorage.setItem('staff', JSON.stringify(this.staff));
     }
 
     get clef() {
@@ -112,8 +118,10 @@ class SwEditor extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if (newValue !== oldValue) {
             if (name === 'tempo') {
-                state.tempo = parseInt(newValue);
-                console.log(state.tempo);
+                if ((!oldValue && !state.tempo) || oldValue) {
+                    state.tempo = parseInt(newValue);
+                    console.log(state.tempo);
+                }
             } else {
                 this.staff[name] = newValue;
                 this.render();

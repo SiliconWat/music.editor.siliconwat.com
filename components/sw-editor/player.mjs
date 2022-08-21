@@ -18,7 +18,7 @@ export async function updateFromPlayer(action) {
         case "delete":
             this.remove();
             break;
-        case "new":
+        case "clear":
             this.clear();
             break;
     };
@@ -32,7 +32,6 @@ export async function paste() {
     if (this.staff.pointer) {
         const note = JSON.parse(await navigator.clipboard.readText());
         const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
-        li.replaceChildren();
         this.renderNote(li, note);
         this.score[this.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]] = note;
     }
@@ -41,7 +40,7 @@ export async function paste() {
 export function remove() {
     if (this.staff.pointer) {
         const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
-        li.replaceChildren();
+        this.renderNote(li, {});
         this.score[this.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]] = {};
     }
 }

@@ -29,6 +29,7 @@ class SwMusic extends HTMLBodyElement {
             state[property] = value;
             this.SwPlayer.tempo = value;
             this.SwEditor.tempo = value;
+            localStorage.setItem('state', JSON.stringify(state));
         }
         return true;
     }

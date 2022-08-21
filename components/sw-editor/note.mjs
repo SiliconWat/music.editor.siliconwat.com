@@ -16,7 +16,7 @@ export function updateFromNav(nav) {
 }
 
 export function updateMeasure(action) {
-    const measure = this.staff.pointer ? this.staff.pointer[0] : this[this.clef].score.length - 1;
+    const measure = this.staff.pointer ? this.staff.pointer[0] : this.score[this.clef].notes.length - 1;
 
     switch (action) {
         case "Add":
@@ -39,7 +39,6 @@ export function updateNote(duration) {
         note.pitch = note.pitch || "C4";
         note.duration = duration;
 
-        li.replaceChildren();
         this.renderNote(li, note);
     }
 }
@@ -53,7 +52,6 @@ export function updateAccidental(accidental) {
         note.duration = note.duration || 'whole';
         note.accidental = accidental === note.accidental ? null : accidental;
 
-        li.replaceChildren();
         this.renderNote(li, note);
     }
 }
@@ -67,7 +65,6 @@ export function updateRest(duration) {
         note.duration = duration;
         note.accidental = null;
 
-        li.replaceChildren();
         this.renderNote(li, note);
     }
 }
@@ -86,7 +83,6 @@ export function updateFromPiano(piano) {
         note.accidental = accidental;
         note.duration = note.duration || 'whole';
 
-        li.replaceChildren();
         this.renderNote(li, note);
 
         //this.setPitch(pitch);

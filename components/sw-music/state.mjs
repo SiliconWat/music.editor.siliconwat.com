@@ -1,6 +1,4 @@
-const STATE = {
-    tempo: 120
-};
+const STATE = JSON.parse(localStorage.getItem('state')) || {};
 
 export const onStateChange = {
     set(state, property, value) {

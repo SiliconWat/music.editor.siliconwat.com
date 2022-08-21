@@ -3,6 +3,7 @@ import "/components/sw-nav/element.mjs";
 import "/components/sw-menubar/element.mjs";
 import "/components/sw-player/element.mjs";
 import "/components/sw-instrument/element.mjs";
+import "/components/sw-history/element.mjs";
 import "/components/sw-editor/element.mjs";
 import "/components/sw-piano/element.mjs";
 
