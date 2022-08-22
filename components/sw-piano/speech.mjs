@@ -1,7 +1,7 @@
-export function initSpeech() {
+export function speech() {
     const SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
     const SpeechGrammarList = window.SpeechGrammarList || webkitSpeechGrammarList;
-    const SpeechRecognitionEvent = window.SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+    //const SpeechRecognitionEvent = window.SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
 
     const colors = [ 'red' , 'orange' , 'yellow', 'green', 'blue', 'indigo', 'violet' ];
     const grammar = `#JSGF V1.0; grammar colors; public <color> = ${colors.join(' | ')};`
@@ -16,27 +16,21 @@ export function initSpeech() {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
+    recognition.onstart = () => {
+        this.listening = true;
+    }
+
+    recognition.onend = () => {
+        this.listening ? recognition.start() : recognition.abort();
+    };
+
     recognition.onresult = event => {
-        const color = event.results[0][0].transcript;
-        console.log(color, `Confidence: ${event.results[0][0].confidence}`);
-    };
-
-    recognition.onspeechend = () => {
-        recognition.stop();
-    };
-
-    recognition.onnomatch = event => {
-        console.log("I didn't recognize that color.");
+        console.log(event.results[0][0].transcript, event.results[0][0].confidence);
     };
 
     recognition.onerror = event => {
-        console.log(`Error occurred in recognition: ${event.error}`);
+        console.log(event.error);
     };
 
     return recognition;
-}
-
-export function speech() {
-    this.recognition.start();
-    console.log('Ready to receive a color command.');
 }

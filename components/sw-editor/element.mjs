@@ -39,7 +39,6 @@ class SwEditor extends HTMLElement {
     }
 
     render() {
-        localStorage.setItem('score', JSON.stringify(this.score));
         const section = this.shadowRoot.querySelector('section');
         section.replaceChildren();
         

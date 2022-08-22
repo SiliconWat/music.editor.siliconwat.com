@@ -32,16 +32,16 @@ export async function paste() {
     if (this.staff.pointer) {
         const note = JSON.parse(await navigator.clipboard.readText());
         const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
-        this.renderNote(li, note);
         this.score[this.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]] = note;
+        this.renderNote(li, note);
     }
 }
 
 export function remove() {
     if (this.staff.pointer) {
         const li = this.shadowRoot.getElementById(`sw-${this.staff.pointer[0]}-${this.staff.pointer[1]}`);
-        this.renderNote(li, {});
         this.score[this.clef].notes[this.staff.pointer[0]][this.staff.pointer[1]] = {};
+        this.renderNote(li, {});
     }
 }
 

@@ -105,8 +105,7 @@ export class MusicLibrary {
         
         const oscillator = context.createOscillator()
         oscillator.type = type
-        if (sustain) oscillator.frequency.linearRampToValueAtTime(this.frequency(octave, note), context.currentTime)
-        else oscillator.frequency.setTargetAtTime(this.frequency(octave, note), context.currentTime, 0.5)
+        sustain ? oscillator.frequency.linearRampToValueAtTime(this.frequency(octave, note), context.currentTime) : oscillator.frequency.setTargetAtTime(this.frequency(octave, note), context.currentTime, 0.5);
         oscillator.connect(envelope).connect(context.destination)
         
         return {

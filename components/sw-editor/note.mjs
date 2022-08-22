@@ -84,7 +84,6 @@ export function updateFromPiano(piano) {
         note.duration = note.duration || 'whole';
 
         this.renderNote(li, note);
-
         //this.setPitch(pitch);
         //this.setAccidental(accidental);
     }

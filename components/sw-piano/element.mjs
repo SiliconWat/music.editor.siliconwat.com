@@ -1,5 +1,6 @@
 import template from './template.mjs';
 import { MusicLibrary } from "../sw-music/library.mjs";
+import * as instrumentProperties from "./instrument.mjs";
 import * as keyboardProperties from "./keyboard.mjs";
 import * as speechProperties from "./speech.mjs";
 
@@ -28,6 +29,8 @@ class SwPiano extends HTMLElement {
         return ['instrument', 'clef'];
     }
 
+    host;
+    listening;
     instruments = {
         piano: {
             treble: SwPiano.#treble,
@@ -56,15 +59,15 @@ class SwPiano extends HTMLElement {
     }
 
     constructor() {
-        super();
+        const host = super();
+        this.host = host;
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
 
     connectedCallback() {
         if (!this.instrument && !this.clef) this.render('piano', 'treble');
-        window.onkeyup = this.keyboard.bind(this);
-        this.recognition = this.initSpeech();
+        this.recognition = this.speech();
     }
 
     render(instrument, clef) {
@@ -87,6 +90,9 @@ class SwPiano extends HTMLElement {
                     break;
                 case "voice":
                     span.append(key[0], document.createElement('br'), key[1]);
+                    break;
+                case "speech":
+                    span.textContent = key;
                     break;
                 case "ASL":
                     const img = document.createElement('img');
@@ -144,20 +150,15 @@ class SwPiano extends HTMLElement {
     }
 
     set audible(value) {
-        if (Boolean(value))
-          this.setAttribute('audible', '');
-        else
-          this.removeAttribute('audible');
+        Boolean(value) ? this.setAttribute('audible', '') : this.removeAttribute('audible');
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        if (name === 'instrument' && ['speech'].includes(this.instrument)) this[this.instrument]();
-        if (newValue !== oldValue) {
-            this.render(this.instrument || "piano", this.clef || "treble");
-        }
+        if (name === 'instrument') this.onInstrumentChange(oldValue, newValue);
+        if (newValue !== oldValue) this.render(this.instrument || "piano", this.clef || "treble");
     }
-    
+
 }
 
-Object.assign(SwPiano.prototype, keyboardProperties, speechProperties);
+Object.assign(SwPiano.prototype, instrumentProperties, keyboardProperties, speechProperties);
 customElements.define("sw-piano", SwPiano);
