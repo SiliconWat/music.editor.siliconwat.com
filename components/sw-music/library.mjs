@@ -24,6 +24,7 @@ export class MusicLibrary {
         return frequencyTable
     }
 
+    #A4
     #chromaticTable
     #enharmonicNotes = {
         "C♯": "C♯|D♭",
@@ -62,7 +63,8 @@ export class MusicLibrary {
     }
 
     constructor(A4) {
-        this.#chromaticTable = MusicLibrary.#frequencyTable(A4);
+        this.#A4 = A4;
+        this.#chromaticTable = MusicLibrary.#frequencyTable(this.#A4);
         //console.log(this.#chromaticTable)
     }
 
@@ -147,5 +149,9 @@ export class MusicLibrary {
                 envelope.gain.exponentialRampToValueAtTime(0.001, context.currentTime + duration)
             } 
         }
+    }
+
+    midi(midiNumber) {
+        return Math.pow(2, (midiNumber-69)/12)*this.#A4;
     }
 }

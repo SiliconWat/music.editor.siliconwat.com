@@ -1,8 +1,8 @@
 import template from './template.mjs';
 import { MusicLibrary } from "../sw-music/library.mjs";
-import * as instrumentProperties from "./instrument.mjs";
-import * as keyboardProperties from "./keyboard.mjs";
-import * as speechProperties from "./speech.mjs";
+import * as instrumentProperties from "./instruments/instrument.mjs";
+import * as keyboardProperties from "./instruments/keyboard.mjs";
+import * as speechProperties from "./instruments/speech.mjs";
 
 class SwPiano extends HTMLElement {
     static #musicLibrary = new MusicLibrary(440);
