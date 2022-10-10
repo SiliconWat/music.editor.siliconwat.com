@@ -1,5 +1,5 @@
 import template from './template.mjs';
-import { MusicLibrary } from "../sw-music/library.mjs";
+import { MusicLibrary } from "../sw-body/library.mjs";
 import * as instrumentProperties from "./instruments/instrument.mjs";
 import * as keyboardProperties from "./instruments/keyboard.mjs";
 import * as speechProperties from "./instruments/speech.mjs";
@@ -60,7 +60,7 @@ class SwPiano extends HTMLElement {
 
     constructor() {
         const host = super();
-        this.host = host;
+        this.host = host; //TODO: remove
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
     }

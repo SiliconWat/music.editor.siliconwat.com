@@ -81,11 +81,11 @@ export class MusicLibrary {
     //https://commons.wikimedia.org/wiki/File:Sign_language_Z.svg
     //https://www.musictheorytutor.org/2013/03/25/solfege-hand-signs/
     asl(octave, note) {
-        return `${ORIGIN}/components/sw-music/ASL/notes/${note.toLowerCase()}.svg`;
+        return `${ORIGIN}/components/sw-body/ASL/notes/${note.toLowerCase()}.svg`;
     }
 
     audio(octave, note, volume=5) {
-        const audio = new Audio(`${ORIGIN}/components/sw-music/keys/${octave}/${this.#enharmonicNotes[note] || note}.mp3`);
+        const audio = new Audio(`${ORIGIN}/components/sw-body/keys/${octave}/${this.#enharmonicNotes[note] || note}.mp3`);
         audio.preload = "auto";
         audio.loop = false;
 

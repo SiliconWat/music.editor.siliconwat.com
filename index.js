@@ -1,4 +1,4 @@
-import "/components/sw-music/element.mjs";
+import "/components/sw-body/element.mjs"; // may need to be last
 import "/components/sw-nav/element.mjs";
 import "/components/sw-menubar/element.mjs";
 import "/components/sw-player/element.mjs";

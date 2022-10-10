@@ -1,6 +1,6 @@
 import template from './template.mjs';
-import { state } from '/components/sw-music/state.mjs';
-import { MusicLibrary } from "../sw-music/library.mjs";
+import { state } from '/components/sw-body/state.mjs';
+import { MusicLibrary } from "../sw-body/library.mjs";
 import * as noteProperties from './note.mjs';
 import * as playerProperties from "./player.mjs";
 

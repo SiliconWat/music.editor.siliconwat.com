@@ -1,5 +1,5 @@
 import template from './template.mjs';
-import { state } from '/components/sw-music/state.mjs';
+import { state } from '/components/sw-body/state.mjs';
 
 class SwPlayer extends HTMLElement {
     #min = 10;
