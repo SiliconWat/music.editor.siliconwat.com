@@ -1,4 +1,4 @@
-export const ORIGIN = window.location.hostname === '127.0.0.1' ? "http://127.0.0.1:5508" : "https://music.siliconwat.com"
+export const ORIGIN = window.location.hostname === '127.0.0.1' ? "http://127.0.0.1:5660" : "https://music.siliconwat.com"
 
 export class MusicLibrary {
     static #getC0(A4) {
